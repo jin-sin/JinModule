@@ -16,9 +16,6 @@ buildscript {
     }
 }
 
-group = 'com.github.jitpack'
-version = '1.0'
-
 allprojects {
     repositories {
         google()
