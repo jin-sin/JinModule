@@ -14,7 +14,7 @@ Edit `root/app/build.gradle` like below.
 #### AndroidX
 ```gradle
 dependencies {
-    implementation 'com.github.appknot:AndroidModule:0.6'
+    implementation 'com.github.appknot:AndroidModule:0.7'
 }
 ```
 <br/><br/>
