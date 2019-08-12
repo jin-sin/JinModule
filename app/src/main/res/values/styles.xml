@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <!-- ProgressBar -->
+    <style name="ProgressBarCircular" parent="AppTheme">
+        <item name="android:indeterminateDrawable">@drawable/progressbar_bg</item>
+        <item name="android:indeterminateDuration">1000</item>
+    </style>
+
 </resources>
