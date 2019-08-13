@@ -275,25 +275,28 @@ class RetrofitUtil {
         }
     }
 
+    var isTestServer = true
+    var API_HOST_TEST = ""
+    var API_HOST = ""
+
+    fun build(baseUrl: String): Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(
+            GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+        .build()
+
+
+    val CODE_SUCCESS = "0"
+
+    private var retrofit = build(getUrl())
+
+
+    fun rebuild(apiHost: String) {
+        retrofit = build(apiHost)
+    }
+
+    fun getUrl(): String  = if (isTestServer) API_HOST_TEST else API_HOST
+
     companion object {
-        const val CODE_SUCCESS = "0"
-
-        private var retrofit = build(getUrl())
-
-        var isTestServer = true
-        var API_HOST_TEST = ""
-        var API_HOST = ""
-
-        fun build(baseUrl: String): Retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(
-                GsonConverterFactory.create(GsonBuilder().setLenient().create()))
-            .build()
-
-        fun rebuild(apiHost: String) {
-            retrofit = build(apiHost)
-        }
-
-        fun getUrl(): String  = if (isTestServer) API_HOST_TEST else API_HOST
     }
 }
