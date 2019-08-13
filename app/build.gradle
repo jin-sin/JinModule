@@ -30,4 +30,8 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.2'
     // Google Material Components
     implementation 'com.google.android.material:material:1.1.0-alpha07'
+    // Http - Retrofit2
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.0.0-alpha02'
 }

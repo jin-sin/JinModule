@@ -14,7 +14,7 @@ Edit `root/app/build.gradle` like below.
 #### AndroidX
 ```gradle
 dependencies {
-    implementation 'com.github.appknot:AndroidModule:0.7'
+    implementation 'com.github.appknot:AndroidModule:0.8'
 }
 ```
 <br/><br/>
@@ -24,7 +24,7 @@ dependencies {
 ### AndroidX
 #### AKCountDownTimer
 ```kotlin
-val countDownTimer = object : AdvancedCountDownTimer(countDownMaxMills, countDownInterval) {
+val countDownTimer = object : AKCountDownTimer(countDownMaxMills, countDownInterval) {
                                 override fun onTick(millisUntilFinished: Long) {
                                     
                                 }
