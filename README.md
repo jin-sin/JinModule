@@ -18,7 +18,10 @@ authToken=jp_lcn1h8uu0hvi33rv6sejqshqj7
 allprojects {
 		repositories {
 			...
-			maven { url 'https://jitpack.io' }
+			maven {
+                        url "https://jitpack.io"
+                        credentials { username authToken }
+            }
 		}
 	}
 ```
