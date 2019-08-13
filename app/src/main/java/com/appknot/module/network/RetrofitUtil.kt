@@ -279,6 +279,18 @@ class RetrofitUtil {
     var API_HOST_TEST = ""
     var API_HOST = ""
 
+    fun setIsTest(isTest: Boolean){
+        isTestServer = isTest
+    }
+
+    fun setHost(apiHost: String) {
+        API_HOST = apiHost
+    }
+
+    fun setHostTest(apiHostTest: String) {
+        API_HOST_TEST = apiHostTest
+    }
+
     fun build(baseUrl: String): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(
