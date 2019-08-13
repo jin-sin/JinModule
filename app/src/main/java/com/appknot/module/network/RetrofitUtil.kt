@@ -71,9 +71,9 @@ class RetrofitUtil {
      */
     fun executeWithProgress(context: Context) {
 //        if (context is BaseActivity) {
-            this.context = context
-            context.showLoadingDialog()
-            progressVisibility = true
+        this.context = context
+        context.showLoadingDialog()
+        progressVisibility = true
 //        }
         execute()
     }
@@ -118,9 +118,9 @@ class RetrofitUtil {
      */
     fun downloadWithProgress(context: Context, filePath: String) {
 //        if (context is BaseActivity) {
-            this.context = context
-            context.showLoadingDialog()
-            progressVisibility = true
+        this.context = context
+        context.showLoadingDialog()
+        progressVisibility = true
 //        }
         download(filePath)
     }
@@ -163,14 +163,19 @@ class RetrofitUtil {
     }
 
     fun toMap(data: Any): LinkedTreeMap<*, *> {
-        return try { data as LinkedTreeMap<*, *> }
-        catch (e: ClassCastException) { LinkedTreeMap<String, Any>() }
+        return try {
+            data as LinkedTreeMap<*, *>
+        } catch (e: ClassCastException) {
+            LinkedTreeMap<String, Any>()
+        }
     }
 
     fun toList(data: Any): ArrayList<*> {
-        return try { data as ArrayList<*>
+        return try {
+            data as ArrayList<*>
+        } catch (e: ClassCastException) {
+            ArrayList<String>()
         }
-        catch (e: ClassCastException) { ArrayList<String>() }
     }
 
     /**
@@ -207,12 +212,12 @@ class RetrofitUtil {
     /* InputStream 을 파일로 저장한다. */
     private fun copyStreamToDisk(body: ResponseBody, filePath: String) {
         val savingFile = File(filePath)
-        var outStream : OutputStream? = null
+        var outStream: OutputStream? = null
         try {
             outStream = FileOutputStream(savingFile)
             body.byteStream()?.copyTo(outStream)
-        } catch (e: Exception) {}
-        finally {
+        } catch (e: Exception) {
+        } finally {
             outStream?.close()
             body.close()
         }
@@ -220,10 +225,11 @@ class RetrofitUtil {
 
     /* 대용량 파일 다운로더. ProgressBar 파라미터가 넘어온다면 다운로드 진행률도 표시한다. */
     @SuppressLint("StaticFieldLeak")
-    inner class FileDownloader(private var body: ResponseBody,
-                               private var filePath: String,
-                               private var pb: ProgressBar?)
-        : AsyncTask<Void, Long, Void>() {
+    inner class FileDownloader(
+        private var body: ResponseBody,
+        private var filePath: String,
+        private var pb: ProgressBar?
+    ) : AsyncTask<Void, Long, Void>() {
 
         override fun onPreExecute() {
             super.onPreExecute()
@@ -252,12 +258,13 @@ class RetrofitUtil {
                         publishProgress(fileSizeDownloaded)
                     }
                     outStream.flush()
-                } catch (e: IOException) {}
-                finally {
+                } catch (e: IOException) {
+                } finally {
                     outStream?.close()
                     inStream?.close()
                 }
-            } catch (e: IOException) {}
+            } catch (e: IOException) {
+            }
             return null
         }
 
@@ -279,7 +286,7 @@ class RetrofitUtil {
     var API_HOST_TEST = ""
     var API_HOST = ""
 
-    fun setIsTest(isTest: Boolean){
+    fun setIsTest(isTest: Boolean) {
         isTestServer = isTest
     }
 
@@ -294,20 +301,28 @@ class RetrofitUtil {
     fun build(baseUrl: String): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(
-            GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+            GsonConverterFactory.create(GsonBuilder().setLenient().create())
+        )
         .build()
 
 
     val CODE_SUCCESS = "0"
 
-    private var retrofit = build(getUrl())
+    private lateinit var retrofit: Retrofit
 
 
     fun rebuild(apiHost: String) {
         retrofit = build(apiHost)
     }
 
-    fun getUrl(): String  = if (isTestServer) API_HOST_TEST else API_HOST
+    fun setRetrofit(isTestServer: Boolean, apiHost: String, apiHostTest: String) {
+        retrofit = build(
+            when (isTestServer) {
+                true -> apiHostTest
+                false -> apiHost
+            }
+        )
+    }
 
     companion object {
     }
