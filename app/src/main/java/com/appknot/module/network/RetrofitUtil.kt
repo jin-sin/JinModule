@@ -300,13 +300,8 @@ class RetrofitUtil {
             retrofit = build(apiHost)
         }
 
-        fun setRetrofit(isTestServer: Boolean, apiHost: String, apiHostTest: String) {
-            retrofit = build(
-                when (isTestServer) {
-                    true -> apiHostTest
-                    false -> apiHost
-                }
-            )
+        fun setRetrofit(apiHost: String) {
+            retrofit = build(apiHost)
         }
     }
 }
