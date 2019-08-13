@@ -8,20 +8,52 @@ Public Appknot Android Module
 
 
 ### Gradle
+<b>Step1</b> Add the token to $HOME/.gradle/gradle.properties
+```gradle
+authToken=jp_lcn1h8uu0hvi33rv6sejqshqj7
+```
 
-Edit `root/app/build.gradle` like below.
+<b>Step1</b> Add it in your root build.gradle at the end of repositories:
+```gradle
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
 
-#### AndroidX
+<b>Step2</b> Add the dependency
 ```gradle
 dependencies {
-    implementation 'com.github.appknot:AndroidModule:0.8'
-}
+	        implementation 'com.github.appknot:AndroidModule:Tag'
+	}
 ```
 <br/><br/>
 
 ## How to use
 
 ### AndroidX
+#### RetrofitUtil
+````kotlin
+setRetrofit(false, "http://appknot.com/api/", "http://appknot.com/api/test/")
+        RetrofitUtil().run {
+
+            call = create(SeotDaApi::class.java).registerToken(
+                "jin",
+                fbToken
+            )
+
+            onSuccess { it ->
+                val userIdx = com.appknot.seotda.extensions.toMap(it)["user_idx"].toString()
+                viewModel.requestEnterRoom(userIdx)
+            }
+
+            onError { _, msg -> showSnackbar(msg) }
+            onFailure { showToast("fail") }
+            executeWithProgress(this@UserActivity)
+        }
+````
 #### AKCountDownTimer
 ```kotlin
 val countDownTimer = object : AKCountDownTimer(countDownMaxMills, countDownInterval) {
