@@ -282,48 +282,31 @@ class RetrofitUtil {
         }
     }
 
-    var isTestServer = true
-    var API_HOST_TEST = ""
-    var API_HOST = ""
-
-    fun setIsTest(isTest: Boolean) {
-        isTestServer = isTest
-    }
-
-    fun setHost(apiHost: String) {
-        API_HOST = apiHost
-    }
-
-    fun setHostTest(apiHostTest: String) {
-        API_HOST_TEST = apiHostTest
-    }
-
-    fun build(baseUrl: String): Retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .addConverterFactory(
-            GsonConverterFactory.create(GsonBuilder().setLenient().create())
-        )
-        .build()
-
-
-    val CODE_SUCCESS = "0"
-
-    private lateinit var retrofit: Retrofit
-
-
-    fun rebuild(apiHost: String) {
-        retrofit = build(apiHost)
-    }
-
-    fun setRetrofit(isTestServer: Boolean, apiHost: String, apiHostTest: String) {
-        retrofit = build(
-            when (isTestServer) {
-                true -> apiHostTest
-                false -> apiHost
-            }
-        )
-    }
 
     companion object {
+
+        val CODE_SUCCESS = "0"
+
+        private lateinit var retrofit: Retrofit
+
+        fun build(baseUrl: String): Retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(
+                GsonConverterFactory.create(GsonBuilder().setLenient().create())
+            )
+            .build()
+
+        fun rebuild(apiHost: String) {
+            retrofit = build(apiHost)
+        }
+
+        fun setRetrofit(isTestServer: Boolean, apiHost: String, apiHostTest: String) {
+            retrofit = build(
+                when (isTestServer) {
+                    true -> apiHostTest
+                    false -> apiHost
+                }
+            )
+        }
     }
 }
