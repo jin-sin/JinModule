@@ -6,10 +6,12 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'com.github.dcendents.android-maven'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -28,10 +30,16 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.0-beta1'
     // Google Material Components
     implementation 'com.google.android.material:material:1.1.0-alpha07'
     // Http - Retrofit2
     api 'com.squareup.retrofit2:retrofit:2.5.0'
     api 'com.squareup.retrofit2:converter-gson:2.5.0'
     api 'com.squareup.okhttp3:logging-interceptor:4.0.0-alpha02'
+    // ImageLoading - Glide
+    api 'com.github.bumptech.glide:glide:4.9.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
+    // VLC Player
+    api 'de.mrmaffen:vlc-android-sdk:2.0.6'
 }

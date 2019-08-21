@@ -38,7 +38,7 @@ dependencies {
 
 ### AndroidX
 #### RetrofitUtil
-````kotlin
+```kotlin
 setRetrofit("http://appknot.com/api/")
         RetrofitUtil().run {
 
@@ -56,7 +56,7 @@ setRetrofit("http://appknot.com/api/")
             onFailure { showToast("fail") }
             executeWithProgress(this@UserActivity)
         }
-````
+```
 #### AKCountDownTimer
 ```kotlin
 val countDownTimer = object : AKCountDownTimer(countDownMaxMills, countDownInterval) {
@@ -69,6 +69,9 @@ val countDownTimer = object : AKCountDownTimer(countDownMaxMills, countDownInter
                                 }
                             }
 ```
+
+#### AKVideoView
+#### AKMediaController
 
 #### DialogExtensions
 ```kotlin
@@ -103,6 +106,7 @@ showToast(message)
 ```
 
 #### Utils
-```kotlin
-1000.convertCurrency()
+```
+Int.convertCurrency() - Int 형 숫자를 받아 1000 단위로 , 를 표시한다
+Int.stringForTime() - Int 형 milliseconds 를 받아 00:00 형식으로 표시한다
 ```
