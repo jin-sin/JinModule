@@ -32,9 +32,9 @@ class AKVideoView : SurfaceView,
     private var mVideoHeight: Int = 0
     private var portraitWidth = 0
     private var portraitHeight = 0
-    private lateinit var onCompletionListener: () -> Unit
-    private var onPreparedListener: (() -> Unit)? = null
-    private lateinit var onBufferingListener: () -> Unit
+    private var onCompletionListener: (() -> Unit)? = null
+    private var onPreparedListener: ((MediaPlayer) -> Unit)? = null
+    private var onBufferingListener: ((MediaPlayer) -> Unit)? = null
     private var onPlayingListener: (() -> Unit)? = null
     private var onPauseListener: (() -> Unit)? = null
     lateinit var videoUri: Uri
@@ -75,6 +75,10 @@ class AKVideoView : SurfaceView,
         mediaPlayer?.play()
     }
 
+    fun stop() {
+        mediaPlayer?.stop()
+    }
+
     fun pause() {
         mediaPlayer?.pause()
     }
@@ -106,9 +110,9 @@ class AKVideoView : SurfaceView,
 
     }
 
-    fun setOnPreparedListener(l: (() -> Unit)?) {
+    fun setOnPreparedListener(l: ((MediaPlayer) -> Unit)?) {
         onPreparedListener = {
-            l?.invoke()
+            l?.invoke(it)
         }
     }
 
@@ -118,9 +122,9 @@ class AKVideoView : SurfaceView,
         }
     }
 
-    fun setOnBufferingListener(l: () -> Unit) {
+    fun setOnBufferingListener(l: (MediaPlayer) -> Unit) {
         onBufferingListener = {
-            l.invoke()
+            l.invoke(it)
         }
     }
 
@@ -172,7 +176,7 @@ class AKVideoView : SurfaceView,
      * @param width
      * @param height
      */
-    private fun setSize(width: Int, height: Int) {
+    fun setSize(width: Int, height: Int) {
         if (mVideoWidth * mVideoHeight <= 1)
             return
 
@@ -300,27 +304,30 @@ class AKVideoView : SurfaceView,
         override fun onEvent(event: MediaPlayer.Event) {
             val player = mOwner.get()
 
-            when (event.type) {
-                MediaPlayer.Event.EndReached -> {
-                    //동영상 끝까지 재생되었다면..
-//                    player?.releasePlayer()
-                    onCompletionListener?.invoke()
-                }
-                MediaPlayer.Event.Opening -> onPreparedListener?.invoke()
-                MediaPlayer.Event.Buffering -> onBufferingListener?.invoke()
-                MediaPlayer.Event.Playing -> onPlayingListener?.invoke()
-                MediaPlayer.Event.Paused -> onPauseListener?.invoke()
-                MediaPlayer.Event.Stopped -> {
-                }
+            player?.mediaPlayer?.let {
 
-                //아래 두 이벤트는 계속 발생됨
-                MediaPlayer.Event.TimeChanged //재생 시간 변화시
-                -> {
-                }
-                MediaPlayer.Event.PositionChanged //동영상 재생 구간 변화시
-                -> {
-                }
-                else -> {
+                when (event.type) {
+                    MediaPlayer.Event.EndReached -> {
+                        //동영상 끝까지 재생되었다면..
+//                    player?.releasePlayer()
+                        onCompletionListener?.invoke()
+                    }
+                    MediaPlayer.Event.Opening -> onPreparedListener?.invoke(it)
+                    MediaPlayer.Event.Buffering -> onBufferingListener?.invoke(it)
+                    MediaPlayer.Event.Playing -> onPlayingListener?.invoke()
+                    MediaPlayer.Event.Paused -> onPauseListener?.invoke()
+                    MediaPlayer.Event.Stopped -> {
+                    }
+
+                    //아래 두 이벤트는 계속 발생됨
+                    MediaPlayer.Event.TimeChanged //재생 시간 변화시
+                    -> {
+                    }
+                    MediaPlayer.Event.PositionChanged //동영상 재생 구간 변화시
+                    -> {
+                    }
+                    else -> {
+                    }
                 }
             }
         }
