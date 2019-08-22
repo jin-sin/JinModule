@@ -196,9 +196,9 @@ class AKVideoView : SurfaceView,
         val screenAR = w.toFloat() / h.toFloat()
 
         if (screenAR < videoAR)
-            h = (w / videoAR).toInt()
+            h = (w / screenAR).toInt()
         else
-            w = (h * videoAR).toInt()
+            w = (h * screenAR).toInt()
 
         holder.setFixedSize(mVideoWidth, mVideoHeight)
         val lp = this.layoutParams

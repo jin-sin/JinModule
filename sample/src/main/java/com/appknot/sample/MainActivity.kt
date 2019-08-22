@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         vv_sample.run {
+
             setVideoURI(Uri.parse("http://graffiti.appknot.com/data/ae46eaf110301fc3e5eb6743944b215392bce7b39de5e9f01ee26253b6a21041.mp4"))
             start()
 
@@ -21,4 +22,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }
