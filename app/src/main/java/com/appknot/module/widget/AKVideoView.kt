@@ -35,7 +35,7 @@ class AKVideoView : SurfaceView,
     private var onCompletionListener: (() -> Unit)? = null
     private var onPreparedListener: ((MediaPlayer) -> Unit)? = null
     private var onBufferingListener: ((MediaPlayer) -> Unit)? = null
-    private var onPlayingListener: (() -> Unit)? = null
+    private var onPlayingListener: ((MediaPlayer) -> Unit)? = null
     private var onPauseListener: (() -> Unit)? = null
     lateinit var videoUri: Uri
     var pauseTime = 0
@@ -94,6 +94,10 @@ class AKVideoView : SurfaceView,
         invalidate()
     }
 
+    fun resumme() {
+        createPlayer()
+    }
+
     fun setMediaController(controller: AKMediaController?) {
         if (advancedMediaController != null) advancedMediaController?.hide()
 
@@ -128,9 +132,9 @@ class AKVideoView : SurfaceView,
         }
     }
 
-    fun setOnPlayingListener(l: () -> Unit) {
+    fun setOnPlayingListener(l: (MediaPlayer) -> Unit) {
         onPlayingListener = {
-            l.invoke()
+            l.invoke(it)
         }
     }
 
@@ -314,7 +318,7 @@ class AKVideoView : SurfaceView,
                     }
                     MediaPlayer.Event.Opening -> onPreparedListener?.invoke(it)
                     MediaPlayer.Event.Buffering -> onBufferingListener?.invoke(it)
-                    MediaPlayer.Event.Playing -> onPlayingListener?.invoke()
+                    MediaPlayer.Event.Playing -> onPlayingListener?.invoke(it)
                     MediaPlayer.Event.Paused -> onPauseListener?.invoke()
                     MediaPlayer.Event.Stopped -> {
                     }
