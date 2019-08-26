@@ -7,10 +7,5 @@
     android:id="@+id/cl_parent"
     tools:context=".MainActivity">
 
-    <com.appknot.module.widget.AKVideoView
-        android:id="@+id/vv_sample"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
