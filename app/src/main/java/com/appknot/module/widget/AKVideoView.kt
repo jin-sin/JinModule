@@ -2,7 +2,11 @@ package com.appknot.module.widget
 
 import android.content.Context
 import android.content.res.Configuration
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
 import android.net.Uri
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceView
@@ -24,7 +28,11 @@ class AKVideoView : SurfaceView,
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     private var libVLC: LibVLC? = null
     private var mediaPlayer: MediaPlayer? = null
@@ -40,6 +48,14 @@ class AKVideoView : SurfaceView,
     lateinit var videoUri: Uri
     var pauseTime = 0
     var advancedMediaController: AKMediaController? = null
+
+    private var audioManager: AudioManager =
+        context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private var audioFocusType = AudioManager.AUDIOFOCUS_GAIN // legacy focus gain
+    private var audioAttributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
+        .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE).build()
+    var audioFocusChangeListener: AudioManager.OnAudioFocusChangeListener =
+        AudioManager.OnAudioFocusChangeListener { }
 
 
     private val STATE_ERROR = -1
@@ -70,13 +86,14 @@ class AKVideoView : SurfaceView,
         libVLC = LibVLC(context, options)
     }
 
-    open fun start() {
+    fun start() {
         attachSurface()
         mediaPlayer?.play()
     }
 
     fun stop() {
         mediaPlayer?.stop()
+        abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
     }
 
     fun pause() {
@@ -112,6 +129,55 @@ class AKVideoView : SurfaceView,
             advancedMediaController?.setAnchorView(anchorView)
         }
 
+    }
+
+    fun setAudioFocusRequest(focusGain: Int) {
+        require(
+            !(focusGain != AudioManager.AUDIOFOCUS_NONE
+                    && focusGain != AudioManager.AUDIOFOCUS_GAIN
+                    && focusGain != AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
+                    && focusGain != AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK
+                    && focusGain != AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE)
+        ) { "Illegal audio focus type $focusGain" }
+        audioFocusType = focusGain
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            audioManager.requestAudioFocus(
+                AudioFocusRequest.Builder(audioFocusType)
+                    .setAudioAttributes(audioAttributes)
+                    .setAcceptsDelayedFocusGain(true)
+                    .setOnAudioFocusChangeListener(audioFocusChangeListener)
+                    .build()
+            )
+        } else {
+            audioManager.requestAudioFocus(
+                audioFocusChangeListener,
+                AudioManager.STREAM_MUSIC,
+                audioFocusType
+            )
+        }
+    }
+
+    fun abandonFocusRequest(focusLoss: Int) {
+        require(
+            !(focusLoss != AudioManager.AUDIOFOCUS_LOSS
+                    && focusLoss != AudioManager.AUDIOFOCUS_LOSS_TRANSIENT
+                    && focusLoss != AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK
+                    )
+        ) { "Illegal audio focus type $focusLoss" }
+        audioFocusType = focusLoss
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            audioManager.abandonAudioFocusRequest(
+//                AudioFocusRequest.Builder(audioFocusType)
+//                    .setAudioAttributes(audioAttributes)
+//                    .setAcceptsDelayedFocusGain(true)
+//                    .setOnAudioFocusChangeListener(audioFocusChangeListener)
+//                    .build()
+//            )
+//        } else {
+            audioManager.abandonAudioFocus(audioFocusChangeListener)
+//        }
     }
 
     fun setOnPreparedListener(l: ((MediaPlayer) -> Unit)?) {
@@ -161,7 +227,15 @@ class AKVideoView : SurfaceView,
         releasePlayer()
     }
 
-    override fun onNewLayout(vlcVout: IVLCVout?, width: Int, height: Int, visibleWidth: Int, visibleHeight: Int, sarNum: Int, sarDen: Int) {
+    override fun onNewLayout(
+        vlcVout: IVLCVout?,
+        width: Int,
+        height: Int,
+        visibleWidth: Int,
+        visibleHeight: Int,
+        sarNum: Int,
+        sarDen: Int
+    ) {
         if (width * height == 0)
             return
 
@@ -220,6 +294,38 @@ class AKVideoView : SurfaceView,
     private fun createPlayer() {
         //플레이어가 있다면 종료(제거)
         releasePlayer()
+
+//        if (audioFocusType > AudioManager.AUDIOFOCUS_NONE) {
+//
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                audioManager.requestAudioFocus(
+//                    AudioFocusRequest.Builder(audioFocusType)
+//                        .setAudioAttributes(audioAttributes)
+//                        .setAcceptsDelayedFocusGain(true)
+//                        .setOnAudioFocusChangeListener(audioFocusChangeListener)
+//                        .build()
+//                )
+//            } else {
+//                audioManager.requestAudioFocus(
+//                    audioFocusChangeListener,
+//                    AudioManager.STREAM_MUSIC,
+//                    audioFocusType
+//                )
+//            }
+//        }else if (audioFocusType < AudioManager.AUDIOFOCUS_NONE) {
+////            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+////                audioManager.abandonAudioFocusRequest(
+////                    AudioFocusRequest.Builder(audioFocusType)
+////                        .setAudioAttributes(audioAttributes)
+////                        .setAcceptsDelayedFocusGain(true)
+////                        .setOnAudioFocusChangeListener(audioFocusChangeListener)
+////                        .build()
+////                )
+////            } else {
+//                audioManager.abandonAudioFocus(audioFocusChangeListener)
+////            }
+//        }
+
         try {
 
             initLibVLC()
