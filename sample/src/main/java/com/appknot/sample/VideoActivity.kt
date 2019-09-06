@@ -18,7 +18,6 @@ class VideoActivity : AppCompatActivity() {
 
             abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
             setVideoURI(arrayOf(Uri.parse("http://graffiti.appknot.com/data/ae46eaf110301fc3e5eb6743944b215392bce7b39de5e9f01ee26253b6a21041.mp4")))
-            this.volume = 0F
             start()
 
             setOnCompletionListener {
@@ -31,12 +30,10 @@ class VideoActivity : AppCompatActivity() {
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> vv_sample.run {
                     setAudioFocusRequest(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
-                    volume = 1F
                     return@run true
                 }
                 MotionEvent.ACTION_UP -> vv_sample.run {
                     abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
-                    volume = 0F
                     return@run true
                 }
                 else -> return@setOnTouchListener true

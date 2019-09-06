@@ -122,6 +122,8 @@ class AKVideoView : PlayerView {
                 audioFocusType
             )
 //        }
+
+        player?.volume = 1F
     }
 
     fun abandonFocusRequest(focusLoss: Int) {
@@ -144,6 +146,8 @@ class AKVideoView : PlayerView {
 //        } else {
             audioManager.abandonAudioFocus(audioFocusChangeListener)
 //        }
+
+        player?.volume = 0F
     }
 
     fun setOnPreparedListener(l: ((SimpleExoPlayer) -> Unit)?) {
