@@ -10,7 +10,7 @@ Public Appknot Android Module
 ### Gradle
 <b>Step1.</b> Add the token to $HOME/.gradle/gradle.properties
 ```gradle
-authToken=jp_htr0nrimo7un8uhog15n1acn3e
+authToken=jp_6hv7j20dp8s7arjs05c5pivbdl
 ```
 
 <b>Step2.</b> Add it in your root build.gradle at the end of repositories:
