@@ -11,5 +11,6 @@
         android:id="@+id/vv_sample"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:use_controller="false"/>
+        app:use_controller="false"
+        app:resize_mode="fill"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

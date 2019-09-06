@@ -93,8 +93,8 @@ class AKVideoView : PlayerView {
         invalidate()
     }
 
-    fun resumme() {
-        createPlayer()
+    fun resume() {
+        player?.playWhenReady = true
     }
 
     fun setAudioFocusRequest(focusGain: Int) {
