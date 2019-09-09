@@ -242,8 +242,12 @@ class AKVideoView : PlayerView {
         rewDetector = GestureDetector(context, rewDoubleTapListener)
         ffwdDetector = GestureDetector(context, ffwdDoubleTapListener)
 
-        exo_content_frame.setOnClickListener { view ->
-            toggleMediaControlsVisibility()
+        exo_content_frame.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> toggleMediaControlsVisibility()
+            }
+
+            return@setOnTouchListener false
         }
         fl_rew.setOnTouchListener { view, motionEvent ->
             return@setOnTouchListener rewDetector.onTouchEvent(motionEvent)
