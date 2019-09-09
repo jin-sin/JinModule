@@ -1,12 +1,19 @@
 package com.appknot.module.widget
 
+import android.R
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
-import android.media.AudioFocusRequest
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.media.AudioManager
 import android.net.Uri
-import android.os.Build
 import android.util.AttributeSet
-import android.view.View
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageButton
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.BehindLiveWindowException
@@ -16,9 +23,13 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import kotlinx.android.synthetic.main.exo_playback_control_view.view.*
+import kotlinx.android.synthetic.main.exo_player_view.view.*
+
 
 /**
  *
@@ -41,6 +52,38 @@ class AKVideoView : PlayerView {
     private var onBufferingListener: ((SimpleExoPlayer) -> Unit)? = null
     private var onPlayingListener: ((SimpleExoPlayer) -> Unit)? = null
     private var onPauseListener: (() -> Unit)? = null
+    private val rewDoubleTapListener = object : GestureDetector.SimpleOnGestureListener()    {
+        override fun onDoubleTap(e: MotionEvent?): Boolean {
+            exo_rew.performClick()
+            return super.onDoubleTap(e)
+        }
+
+        override fun onDown(e: MotionEvent?): Boolean {
+            return true
+        }
+
+        override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+            toggleMediaControlsVisibility()
+            return super.onSingleTapConfirmed(e)
+        }
+    }
+    private val ffwdDoubleTapListener = object : GestureDetector.SimpleOnGestureListener()    {
+        override fun onDoubleTap(e: MotionEvent?): Boolean {
+            exo_ffwd.performClick()
+            return super.onDoubleTap(e)
+        }
+
+        override fun onDown(e: MotionEvent?): Boolean {
+            return true
+        }
+
+        override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+            toggleMediaControlsVisibility()
+            return super.onSingleTapConfirmed(e)
+        }
+    }
+    private lateinit var rewDetector: GestureDetector
+    private lateinit var ffwdDetector: GestureDetector
     var videoUri = emptyArray<Uri>()
 
     private var audioManager: AudioManager =
@@ -51,15 +94,30 @@ class AKVideoView : PlayerView {
     var audioFocusChangeListener: AudioManager.OnAudioFocusChangeListener =
         AudioManager.OnAudioFocusChangeListener { }
 
+    private var fullScreenDialog: Dialog? = null
+    private var exoPlayerFullscreen = false
+    private var fullScreenButton: ImageButton? = null
+
+    /**
+     * 풀스크린 버튼 사용시 반드시 값을 넣어주세요
+     * */
+    var parentView: FrameLayout? = null
+
     var volume: Float
         get() = player?.volume!!
-        set(value) { player?.volume = value }
+        set(value) {
+            player?.volume = value
+        }
 
 
     init {
         isFocusable = true
         isFocusableInTouchMode = true
         requestFocus()
+
+        initViews()
+        initFullscreenButton()
+        initFullscreenDialog()
     }
 
 
@@ -116,11 +174,11 @@ class AKVideoView : PlayerView {
 //                    .build()
 //            )
 //        } else {
-            audioManager.requestAudioFocus(
-                audioFocusChangeListener,
-                AudioManager.STREAM_MUSIC,
-                audioFocusType
-            )
+        audioManager.requestAudioFocus(
+            audioFocusChangeListener,
+            AudioManager.STREAM_MUSIC,
+            audioFocusType
+        )
 //        }
     }
 
@@ -142,7 +200,7 @@ class AKVideoView : PlayerView {
 //                    .build()
 //            )
 //        } else {
-            audioManager.abandonAudioFocus(audioFocusChangeListener)
+        audioManager.abandonAudioFocus(audioFocusChangeListener)
 //        }
     }
 
@@ -176,6 +234,20 @@ class AKVideoView : PlayerView {
         }
     }
 
+    private fun initViews() {
+        rewDetector = GestureDetector(context, rewDoubleTapListener)
+        ffwdDetector = GestureDetector(context, ffwdDoubleTapListener)
+
+        exo_content_frame.setOnClickListener { view ->
+            toggleMediaControlsVisibility()
+        }
+        fl_rew.setOnTouchListener { view, motionEvent ->
+            return@setOnTouchListener rewDetector.onTouchEvent(motionEvent)
+        }
+        fl_ffwd.setOnTouchListener { view, motionEvent ->
+            return@setOnTouchListener ffwdDetector.onTouchEvent(motionEvent)
+        }
+    }
 
     fun createPlayer() {
         if (player == null) {
@@ -266,4 +338,85 @@ class AKVideoView : PlayerView {
             }
         }
     }
+
+    private fun initFullscreenDialog() {
+
+        fullScreenDialog =
+            object : Dialog(context, R.style.Theme_Black_NoTitleBar_Fullscreen) {
+                override fun onBackPressed() {
+                    if (exoPlayerFullscreen)
+                        parentView?.let { closeFullscreenDialog(it) }
+                    super.onBackPressed()
+                }
+            }
+
+    }
+
+    private fun openFullscreenDialog() {
+
+        (context as Activity).requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+
+        (this.parent as ViewGroup).removeView(this)
+        fullScreenDialog?.addContentView(
+            this,
+            ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        )
+        fullScreenButton?.isSelected = true
+        exoPlayerFullscreen = true
+        fullScreenDialog?.let {
+            if (!it.isShowing)
+                it.show()
+        }
+
+        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT
+    }
+
+
+    private fun closeFullscreenDialog(parentView: FrameLayout) {
+
+        (context as Activity).requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+        (this.parent as ViewGroup).removeView(this)
+        parentView.addView(this)
+        exoPlayerFullscreen = false
+        fullScreenDialog?.dismiss()
+        fullScreenButton?.isSelected = false
+    }
+
+    private fun initFullscreenButton() {
+
+        val controlView = exo_controller
+        fullScreenButton = controlView.exo_fullscreen
+        fullScreenButton?.setOnClickListener {
+            if (!exoPlayerFullscreen)
+                openFullscreenDialog()
+            else
+                parentView?.let { closeFullscreenDialog(it) }
+        }
+
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        when (newConfig.orientation) {
+            Configuration.ORIENTATION_LANDSCAPE -> openFullscreenDialog()
+            Configuration.ORIENTATION_PORTRAIT -> parentView?.let { closeFullscreenDialog(it) }
+        }
+    }
+
+
+    private fun toggleMediaControlsVisibility() {
+        exo_controller?.let {
+            if (it.isShown) {
+                it.hide()
+            } else {
+                it.show()
+            }
+        }
+    }
+
+
 }

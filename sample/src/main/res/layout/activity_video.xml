@@ -6,11 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".VideoActivity">
 
+    <FrameLayout
+        android:id="@+id/fl_media_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <com.appknot.module.widget.AKVideoView
-        android:id="@+id/vv_sample"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:use_controller="false"
-        app:resize_mode="fill"/>
+        <com.appknot.module.widget.AKVideoView
+            android:id="@+id/vv_sample"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:resize_mode="fill"
+            app:rewind_increment="2000"
+            app:fastforward_increment="2000"/>
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
