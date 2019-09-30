@@ -17,7 +17,7 @@ class VideoActivity : AppCompatActivity() {
         vv_sample.run {
 
             parentView = fl_media_frame
-            setVideoURI(arrayOf(Uri.parse("http://graffiti.appknot.com/data/ae46eaf110301fc3e5eb6743944b215392bce7b39de5e9f01ee26253b6a21041.mp4")))
+            setVideoURI(arrayOf(Uri.parse("http://graffiti.appknot.com/data/video/ae46eaf110301fc3e5eb6743944b215392bce7b39de5e9f01ee26253b6a21041.mp4")))
             abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
             start()
 
@@ -42,24 +42,4 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (Util.SDK_INT > 23) {
-            vv_sample.createPlayer()
-            vv_sample.onResume()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (Util.SDK_INT <= 23 || vv_sample.player == null) {
-            vv_sample.createPlayer()
-            vv_sample.onResume()
-        }
-    }
-
-    override fun onDestroy() {
-        vv_sample.stop()
-        super.onDestroy()
-    }
 }

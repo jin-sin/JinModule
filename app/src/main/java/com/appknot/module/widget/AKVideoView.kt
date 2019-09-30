@@ -258,6 +258,8 @@ class AKVideoView : PlayerView {
     }
 
     fun createPlayer() {
+        releasePlayer()
+
         if (player == null) {
             player = ExoPlayerFactory.newSimpleInstance(context)
 
@@ -299,7 +301,7 @@ class AKVideoView : PlayerView {
     /*
      *  동영상 플레이어 종료
      */
-    private fun releasePlayer() {
+    fun releasePlayer() {
         player?.let {
             it.release()
             mediaSource = null
