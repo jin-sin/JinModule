@@ -1,3 +1,5 @@
+![Release](https://jitpack.io/v/appknot/AndroidModule.svg)
+
 # What is AndroidModule?
 
 Public Appknot Android Module
