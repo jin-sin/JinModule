@@ -52,7 +52,7 @@ class AKVideoView : PlayerView {
     private var onBufferingListener: ((SimpleExoPlayer) -> Unit)? = null
     private var onPlayingListener: ((SimpleExoPlayer) -> Unit)? = null
     private var onPauseListener: (() -> Unit)? = null
-    private val rewDoubleTapListener = object : GestureDetector.SimpleOnGestureListener()    {
+    private val rewDoubleTapListener = object : GestureDetector.SimpleOnGestureListener() {
         override fun onDoubleTap(e: MotionEvent?): Boolean {
             exo_rew.performClick()
             return super.onDoubleTap(e)
@@ -67,7 +67,7 @@ class AKVideoView : PlayerView {
             return super.onSingleTapConfirmed(e)
         }
     }
-    private val ffwdDoubleTapListener = object : GestureDetector.SimpleOnGestureListener()    {
+    private val ffwdDoubleTapListener = object : GestureDetector.SimpleOnGestureListener() {
         override fun onDoubleTap(e: MotionEvent?): Boolean {
             exo_ffwd.performClick()
             return super.onDoubleTap(e)
@@ -118,6 +118,7 @@ class AKVideoView : PlayerView {
         initViews()
         initFullscreenButton()
         initFullscreenDialog()
+
     }
 
 
@@ -419,11 +420,13 @@ class AKVideoView : PlayerView {
 
 
     private fun toggleMediaControlsVisibility() {
-        exo_controller?.let {
-            if (it.isShown) {
-                it.hide()
-            } else {
-                it.show()
+        if (useController) {
+            exo_controller?.let {
+                if (it.isShown) {
+                    it.hide()
+                } else {
+                    it.show()
+                }
             }
         }
     }
