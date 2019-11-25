@@ -1,15 +1,12 @@
 package com.appknot.module.util
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
+import android.graphics.*
 import android.media.ExifInterface
+import android.net.Uri
 import android.os.Environment
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
+import java.nio.channels.FileChannel
 import java.text.DecimalFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -71,7 +68,7 @@ fun correctCameraOrientation(imgFile: File, context: Context) {
 
 }
 
-private fun exifOrientationToDegrees(exifOrientation: Int): Int {
+fun exifOrientationToDegrees(exifOrientation: Int): Int {
     if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
         return 90
     } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
@@ -120,6 +117,49 @@ fun rotateImage(bitmap: Bitmap?, degrees: Float): Bitmap {
     return bitmap!!
 }
 
+/**
+ * uri 로 부터 파일로 복사한다
+ */
+fun copyUriToFile(context: Context, srcUri: Uri, target: File) {
+    lateinit var inputStream: FileInputStream
+    lateinit var outputStream: FileOutputStream
+    lateinit var fcin: FileChannel
+    lateinit var fcout: FileChannel
+    try {
+        inputStream = context.contentResolver.openInputStream(srcUri) as FileInputStream
+        outputStream = FileOutputStream(target)
+
+        fcin = inputStream.channel
+        fcout = outputStream.channel
+
+        val size = fcin.size()
+        fcin.transferTo(0, size, fcout)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    } finally {
+        try {
+            fcout.close()
+        } catch (ioe: IOException) {
+        }
+
+        try {
+            fcin.close()
+        } catch (ioe: IOException) {
+        }
+
+        try {
+            outputStream.close()
+        } catch (ioe: IOException) {
+        }
+
+        try {
+            inputStream.close()
+        } catch (ioe: IOException) {
+        }
+
+    }
+}
+
 fun saveBitmapToFile(bitmap: Bitmap, context: Context) {
     val target = getTempImageFile(context)
     try {
@@ -156,8 +196,34 @@ fun getNewFilePath(): String {
     return getLocalDir().absolutePath + "/" + getNewFileName()
 }
 
-private fun getNewFileName(): String {
+fun getNewFileName(): String {
     return "sample_" + TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + ".jpg"
+}
+
+/**
+ * Bitmap 을 받아 가운데를 중심으로 원하는 너비와 높이로 Crop 하여 리턴한다
+ */
+fun scaleCenterCrop(source: Bitmap, newWidth: Int, newHeight: Int): Bitmap {
+    val sourceWidth: Float = source.width.toFloat()
+    val sourceHeight: Float = source.height.toFloat()
+
+    val xScale: Float = (newWidth / sourceWidth)
+    val yScale: Float = (newHeight / sourceHeight)
+    val scale: Float = Math.max(xScale, yScale)
+
+    val scaledWidth: Float = scale * sourceWidth
+    val scaleHeight: Float = scale * sourceHeight
+
+    val left: Float = ((newWidth - scaledWidth) / 2)
+    val top: Float = ((newHeight - scaleHeight) / 2)
+
+    val targetRect = RectF(left, top, left + scaledWidth, top + scaleHeight)
+
+    val dest = Bitmap.createBitmap(newWidth, newHeight, source.config)
+    val canvas = Canvas(dest)
+    canvas.drawBitmap(source, null, targetRect, null)
+
+    return dest
 }
 
 /** ------------------------------------------------------------------- */
