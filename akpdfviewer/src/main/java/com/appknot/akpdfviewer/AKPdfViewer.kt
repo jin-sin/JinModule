@@ -1,14 +1,17 @@
 package com.appknot.akpdfviewer
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
+import android.graphics.*
 import android.graphics.pdf.PdfDocument
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.ViewGroup
 import com.appknot.module.widget.canvas.AKCanvas
 import com.github.barteksc.pdfviewer.PDFView
+import com.github.barteksc.pdfviewer.listener.OnDrawListener
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
+import com.github.barteksc.pdfviewer.util.Constants
+import com.github.barteksc.pdfviewer.util.FitPolicy
 import com.shockwave.pdfium.PdfiumCore
 import java.io.File
 import java.io.FileNotFoundException
@@ -43,17 +46,31 @@ class AKPdfViewer : PDFView, OnPageChangeListener {
         }
     }
 
+    val paint = Paint()
+
+    val path = Path()
+
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, set: AttributeSet, pdfWidth: Int) : super(context, set) {
         this.pdfWidth = pdfWidth
+        Constants.Pinch.MAXIMUM_ZOOM = 0F
+
+
+
+        paint.color = Color.RED
+        paint.strokeWidth = 30F
+        paint.style = Paint.Style.STROKE
     }
 
 
     fun initPdf(pdf: File) {
+        val drawListener = OnDrawListener { canvas, pageWidth, pageHeight, displayedPage ->
+            canvas.drawPath(path, paint)
+        }
         this.pdf = pdf
         this.fromFile(pdf)
             .enableSwipe(true)
-            .enableDoubletap(true)
+            .enableDoubletap(false)
             .defaultPage(0)
             .enableAnnotationRendering(true)
             .swipeHorizontal(true)
@@ -62,6 +79,8 @@ class AKPdfViewer : PDFView, OnPageChangeListener {
             .pageFling(true)
             .enableAntialiasing(true)
             .onPageChange(this)
+            .pageFitPolicy(FitPolicy.HEIGHT)
+            .onDraw(drawListener)
             .load()
 
         pdfiumCore = PdfiumCore(context)
@@ -72,6 +91,10 @@ class AKPdfViewer : PDFView, OnPageChangeListener {
                 if (i == 1) drawCanvases.add(DrawCanvas(akCanvas, i))
                 else {
                     val akCanvas = AKCanvas(context)
+                    akCanvas.layoutParams = ViewGroup.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.MATCH_PARENT
+                    )
                     drawCanvases.add(DrawCanvas(akCanvas, i))
                 }
             }
@@ -84,6 +107,10 @@ class AKPdfViewer : PDFView, OnPageChangeListener {
             LayoutParams.MATCH_PARENT
         )
         addView(drawCanvases[pageNum - 1].akCanvas)
+
+        akCanvas.onLayoutListener = {
+            draw(drawCanvases[pageNum - 1].akCanvas.canvas)
+        }
     }
 
     private fun getPageLength(pdfFile: File): Int {

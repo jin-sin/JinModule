@@ -6,10 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".PdfViewActivity">
 
-    <com.appknot.akpdfviewer.AKPdfViewer
-        android:id="@+id/pdf_view"
+
+    <com.appknot.module.widget.AKZoomView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.appknot.akpdfviewer.AKPdfViewer
+            android:id="@+id/pdf_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.appknot.module.widget.AKZoomView>
 
     <Button
         android:id="@+id/btn_draw"

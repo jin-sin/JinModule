@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import android.R.attr.action
-
+import android.util.Log
 
 
 /**
@@ -28,9 +28,7 @@ class AKCanvas : AppCompatImageView {
     lateinit var bitmap: Bitmap
     private var scaledBitmap: Bitmap? = null
     var canvas: Canvas? = null
-
-    lateinit var scaleGestureDetector: ScaleGestureDetector
-    var scaleFactor: Float = 1F
+    var isZoom = false
     private var posX = 0F
     private var posY = 0F
     private var lastTouchX = 0F
@@ -38,6 +36,7 @@ class AKCanvas : AppCompatImageView {
     private val INVALID_POINTER_ID = -1
     private var activePointerId = INVALID_POINTER_ID
 
+    lateinit var onLayoutListener: (Canvas) -> Unit
     init {
 
         paint.color = Color.RED
@@ -52,8 +51,7 @@ class AKCanvas : AppCompatImageView {
 
     override fun onDraw(canvas: Canvas) {
         canvas.save()
-//        canvas.translate(posX, posY)
-        canvas.scale(scaleFactor, scaleFactor)
+//        if (isZoom) canvas.translate(posX, posY)
 
         canvas.drawPath(path, paint)
         this.canvas?.drawPath(path, paint)
@@ -61,8 +59,7 @@ class AKCanvas : AppCompatImageView {
         canvas.restore()
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        scaleGestureDetector.onTouchEvent(event)
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
 
         val x = event.x
         val y = event.y
@@ -76,23 +73,26 @@ class AKCanvas : AppCompatImageView {
                 activePointerId = event.getPointerId(0)
 
                 path.moveTo(x, y)
-            }
-            MotionEvent.ACTION_POINTER_DOWN -> {
-                val pointerIndex =
-                    action and MotionEvent.ACTION_POINTER_INDEX_MASK shr MotionEvent.ACTION_POINTER_INDEX_SHIFT
 
+
+            }
+            MotionEvent.ACTION_POINTER_DOWN,
+            MotionEvent.ACTION_POINTER_2_DOWN -> {
+                isZoom = true
             }
             MotionEvent.ACTION_MOVE -> {
                 val pointerIndex = event.findPointerIndex(activePointerId)
                 val x = event.getX(pointerIndex)
                 val y = event.getY(pointerIndex)
 
-                if (!scaleGestureDetector.isInProgress) {
+                if (!isZoom) {
                     val dx = x - lastTouchX
                     val dy = y - lastTouchY
 
                     posX += dx
                     posY += dy
+
+                    path.lineTo(x, y)
 
                     invalidate()
                 }
@@ -100,15 +100,22 @@ class AKCanvas : AppCompatImageView {
                 lastTouchX = x
                 lastTouchY = y
 
-                path.lineTo(x, y)
+
+//                if (!isZoom) {
+////                    scaleGestureDetector.onTouchEvent(event)
+//                }
             }
             MotionEvent.ACTION_UP -> {
+                isZoom = false
                 activePointerId = INVALID_POINTER_ID
             }
             MotionEvent.ACTION_CANCEL -> {
+                isZoom = false
                 activePointerId = INVALID_POINTER_ID
             }
             MotionEvent.ACTION_POINTER_UP -> {
+                isZoom = false
+
                 val pointerIndex =
                     action and MotionEvent.ACTION_POINTER_INDEX_MASK shr MotionEvent.ACTION_POINTER_INDEX_SHIFT
                 val pointerId = event.getPointerId(pointerIndex)
@@ -123,6 +130,7 @@ class AKCanvas : AppCompatImageView {
 
 //        invalidate()
 
+        Log.d("AKCanvas onTouch isZoom", isZoom.toString())
 
         return true
     }
@@ -134,29 +142,8 @@ class AKCanvas : AppCompatImageView {
             canvas = Canvas(it)
             draw(canvas)
 
-            scaleGestureDetector = ScaleGestureDetector(context, ScaleListener())
+            canvas?.let { canvas -> onLayoutListener.invoke(canvas) }
         }
     }
 
-    inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        override fun onScale(detector: ScaleGestureDetector): Boolean {
-
-            scaleFactor *= detector.scaleFactor
-            scaleFactor = Math.max(0.1F, Math.min(scaleFactor, 5.0F))
-
-            scaleX = scaleFactor
-            scaleY = scaleFactor
-
-//            val scaleBitmap = Bitmap.createScaledBitmap(bitmap, (bitmap.width * detector.scaleFactor).toInt(), (bitmap.height * detector.scaleFactor).toInt(), false)
-//            val scaleCanvas = Canvas(scaleBitmap)
-//            val scaleMatrix = Matrix()
-//
-//            scaleMatrix.setScale(detector.scaleFactor, detector.scaleFactor)
-//            scaleCanvas.drawBitmap(scaleBitmap, scaleMatrix, paint)
-
-            invalidate()
-
-            return true
-        }
-    }
 }

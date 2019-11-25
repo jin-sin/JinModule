@@ -1,4 +1,4 @@
-package com.appknot.seotda.extensions
+package com.appknot.module.extensions
 
 import android.app.Activity
 import android.content.Context
