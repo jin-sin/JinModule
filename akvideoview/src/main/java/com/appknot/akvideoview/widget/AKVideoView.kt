@@ -1,4 +1,4 @@
-package com.appknot.module.widget
+package com.appknot.akvideoview.widget
 
 import android.R
 import android.app.Activity

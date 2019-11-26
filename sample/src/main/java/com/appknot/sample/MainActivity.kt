@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.appknot.module.extensions.startActivity
 import com.appknot.module.view.PhotoAttachableActivity
 
 class MainActivity : PhotoAttachableActivity() {
@@ -16,7 +17,8 @@ class MainActivity : PhotoAttachableActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        showImageAlert()
+//        showImageAlert()
+        startActivity<VideoActivity>()
     }
 
 

@@ -42,8 +42,4 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.9.0'
     // Permission
     api 'gun0912.ted:tedpermission:2.2.0'
-    // ExoPlayer
-    api 'com.google.android.exoplayer:exoplayer:2.10.4'
-    api 'com.google.android.exoplayer:exoplayer-core:2.10.4'
-    api 'com.google.android.exoplayer:exoplayer-ui:2.10.4'
 }
