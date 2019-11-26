@@ -33,13 +33,13 @@ allprojects {
 Core
 ```gradle
 dependencies {
-	        implementation 'com.github.appknot:AndroidModule:version'
+	        implementation 'com.github.appknot.AndroidModule.core:$version'
 	}
 ```
 AkVideoView
 ```gradle
 dependencies {
-	        implementation 'com.github.appknot:AndroidModule:akvideoview:version'
+	        implementation 'com.github.appknot.AndroidModule:akvideoview:$version'
 	}
 ```
 <br/><br/>
