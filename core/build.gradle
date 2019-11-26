@@ -43,3 +43,9 @@ dependencies {
     // Permission
     api 'gun0912.ted:tedpermission:2.2.0'
 }
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+artifacts.add('archives', sourcesJar)
