@@ -29,16 +29,17 @@ allprojects {
 ```
 
 <b>Step3.</b> Add the dependency
+<br/><br/>
 Core
 ```gradle
 dependencies {
-	        implementation 'com.github.appknot:AndroidModule:Tag'
+	        implementation 'com.github.appknot:AndroidModule:version'
 	}
 ```
 AkVideoView
 ```gradle
 dependencies {
-	        implementation 'com.github.appknot:AndroidModule:akvideoview:Tag'
+	        implementation 'com.github.appknot:AndroidModule:akvideoview:version'
 	}
 ```
 <br/><br/>
