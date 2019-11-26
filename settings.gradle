@@ -1,1 +1,1 @@
-include ':app', ':sample', ':akpdfviewer', ':akvideoview'
+include ':core', ':sample', ':akpdfviewer', ':akvideoview'
