@@ -31,6 +31,10 @@ allprojects {
 <b>Step3.</b> Add the dependency
 <br/><br/>
 Core
+* `Retrofit`
+* `Glide`
+* `TedPermission`
+
 ```gradle
 dependencies {
 	        implementation 'com.github.appknot.AndroidModule.core:$version'
