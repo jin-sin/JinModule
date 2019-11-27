@@ -31,9 +31,16 @@ allprojects {
 <b>Step3.</b> Add the dependency
 <br/><br/>
 Core
-* `Retrofit`
-* `Glide`
-* `TedPermission`
+* Retrofit
+* Glide
+* TedPermission
+* PhotoAttachActivity
+* Extensions - IntentExtension DialogExtensions SnackbarExtensions ToastExtexsions
+* AKCountDownTimer
+* AKZoomView
+* Utils
+* ApiResponse
+* RetrofittUtil
 
 ```gradle
 dependencies {
