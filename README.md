@@ -31,15 +31,26 @@ allprojects {
 <b>Step3.</b> Add the dependency
 <br/><br/>
 Core
+* Retrofit
+* Glide
+* TedPermission
+* PhotoAttachActivity
+* Extensions - IntentExtension DialogExtensions SnackbarExtensions ToastExtexsions
+* AKCountDownTimer
+* AKZoomView
+* Utils
+* ApiResponse
+* RetrofittUtil
+
 ```gradle
 dependencies {
-	        implementation 'com.github.appknot:AndroidModule:version'
+	        implementation 'com.github.appknot.AndroidModule.core:$version'
 	}
 ```
 AkVideoView
 ```gradle
 dependencies {
-	        implementation 'com.github.appknot:AndroidModule:akvideoview:version'
+	        implementation 'com.github.appknot.AndroidModule:akvideoview:$version'
 	}
 ```
 <br/><br/>
