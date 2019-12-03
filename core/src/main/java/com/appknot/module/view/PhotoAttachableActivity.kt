@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
+import android.os.StrictMode
 import android.provider.MediaStore
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +38,13 @@ abstract class PhotoAttachableActivity : AppCompatActivity() {
             const val PERMISSION_ABOUT_GALLERY = 100
             const val PERMISSION_ABOUT_CAMERA = 101
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
     }
     
     fun permissionCheck(reqPermission: Array<String>, reqCode: Int): Boolean {
@@ -125,8 +134,8 @@ abstract class PhotoAttachableActivity : AppCompatActivity() {
         if (!isValid) return
         this.cropRatio = cropRatio
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        //        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(FileUtil.getTempImageFile(this)));
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(context, "${context.applicationContext.packageName}.fileprovider", getTempImageFile(this)))
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempImageFile(this)))
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(context, "${context.applicationContext.packageName}.fileprovider", getTempImageFile(context)))
         intent.putExtra("return-data", true)
         startActivityForResult(intent, ACTIVITY_REQUEST_CODE.PICK_CAMERA)
     }
