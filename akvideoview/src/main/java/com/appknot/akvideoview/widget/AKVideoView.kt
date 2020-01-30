@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.exo_player_view.view.*
  *
  * @author Jin on 2019-08-13
  */
-class AKVideoView : PlayerView {
+open class AKVideoView : PlayerView {
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
