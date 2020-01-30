@@ -16,7 +16,7 @@ class VideoActivity : AppCompatActivity() {
         vv_sample.run {
 
             parentView = fl_media_frame
-            setVideoURI(arrayOf(Uri.parse("http://graffiti.appknot.com/data/video/ae46eaf110301fc3e5eb6743944b215392bce7b39de5e9f01ee26253b6a21041.mp4")))
+            setVideoURI(arrayOf(Uri.parse("https://s3.ap-northeast-2.amazonaws.com/apne2-apprd-tr-static/564a2d537fb62ac70387a3e65cccabbd96dc5ba9.mp4")))
             abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
             start()
 
