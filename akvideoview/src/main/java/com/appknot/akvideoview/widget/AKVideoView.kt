@@ -103,6 +103,8 @@ open class AKVideoView : PlayerView {
         else
             parentView?.let { closeFullscreenDialog(it) }
     }
+    var canRewind = true
+    var canFewForward = true
 
     /**
      * 풀스크린 버튼 사용시 반드시 값을 넣어주세요
@@ -256,11 +258,15 @@ open class AKVideoView : PlayerView {
 
             return@setOnTouchListener false
         }
-        fl_rew.setOnTouchListener { view, motionEvent ->
-            return@setOnTouchListener rewDetector.onTouchEvent(motionEvent)
+        if (canRewind) {
+            fl_rew.setOnTouchListener { view, motionEvent ->
+                return@setOnTouchListener rewDetector.onTouchEvent(motionEvent)
+            }
         }
-        fl_ffwd.setOnTouchListener { view, motionEvent ->
-            return@setOnTouchListener ffwdDetector.onTouchEvent(motionEvent)
+        if (canFewForward) {
+            fl_ffwd.setOnTouchListener { view, motionEvent ->
+                return@setOnTouchListener ffwdDetector.onTouchEvent(motionEvent)
+            }
         }
     }
 
