@@ -7,4 +7,5 @@
 
     <color name="bg_seek_bar_video_active">#ff0000</color>
     <color name="bg_seek_bar_video_inactive">#d1d1d1</color>
+    <color name="bg_seek_bar_buffer">#989898</color>
 </resources>

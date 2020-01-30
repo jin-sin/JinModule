@@ -112,6 +112,6 @@
         app:scrubber_drawable="@drawable/seek_bar_thumb"
         app:played_color="@color/bg_seek_bar_video_active"
         app:unplayed_color="@color/bg_seek_bar_video_inactive"
-        app:buffered_color="@color/colorPrimary"/>
+        app:buffered_color="@color/bg_seek_bar_buffer"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
