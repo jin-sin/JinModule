@@ -97,6 +97,12 @@ open class AKVideoView : PlayerView {
     private var fullScreenDialog: Dialog? = null
     private var exoPlayerFullscreen = false
     private var fullScreenButton: ImageButton? = null
+    var fullScreenButtonListener = OnClickListener {
+        if (!exoPlayerFullscreen)
+            openFullscreenDialog()
+        else
+            parentView?.let { closeFullscreenDialog(it) }
+    }
 
     /**
      * 풀스크린 버튼 사용시 반드시 값을 넣어주세요
@@ -401,12 +407,7 @@ open class AKVideoView : PlayerView {
 
         val controlView = exo_controller
         fullScreenButton = controlView.exo_fullscreen
-        fullScreenButton?.setOnClickListener {
-            if (!exoPlayerFullscreen)
-                openFullscreenDialog()
-            else
-                parentView?.let { closeFullscreenDialog(it) }
-        }
+        fullScreenButton?.setOnClickListener(fullScreenButtonListener)
 
     }
 
