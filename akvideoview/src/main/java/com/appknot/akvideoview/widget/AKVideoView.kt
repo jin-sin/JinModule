@@ -6,11 +6,13 @@ import android.app.Dialog
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Color
 import android.media.AudioManager
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageButton
@@ -103,9 +105,35 @@ open class AKVideoView : PlayerView {
         else
             parentView?.let { closeFullscreenDialog(it) }
     }
+        set(value) {
+            fullScreenButton?.setOnClickListener(value)
+        }
     var canRewind = true
+        set(value) {
+            when (value) {
+                true -> fl_rew.setOnTouchListener { view, motionEvent ->
+                    return@setOnTouchListener rewDetector.onTouchEvent(motionEvent)
+                }
+                false -> fl_rew.setOnTouchListener(null)
+            }
+        }
     var canFewForward = true
-    var isEnable = true
+        set(value) {
+            when (value) {
+                true -> fl_ffwd.setOnTouchListener { view, motionEvent ->
+                    return@setOnTouchListener ffwdDetector.onTouchEvent(motionEvent)
+                }
+                false -> fl_ffwd.setOnTouchListener(null)
+            }
+        }
+    var isEnableSeekBar = true
+        set(value) {
+            when (value) {
+                true -> exo_progress.visibility = View.VISIBLE
+                false -> exo_progress.visibility = View.INVISIBLE
+            }
+        }
+    var currentResizeMode = resizeMode
 
     /**
      * 풀스크린 버튼 사용시 반드시 값을 넣어주세요
@@ -127,6 +155,7 @@ open class AKVideoView : PlayerView {
         initViews()
         initFullscreenButton()
         initFullscreenDialog()
+
 
     }
 
@@ -260,17 +289,8 @@ open class AKVideoView : PlayerView {
             return@setOnTouchListener false
         }
         if (canRewind) {
-            fl_rew.setOnTouchListener { view, motionEvent ->
-                return@setOnTouchListener rewDetector.onTouchEvent(motionEvent)
-            }
         }
         if (canFewForward) {
-            fl_ffwd.setOnTouchListener { view, motionEvent ->
-                return@setOnTouchListener ffwdDetector.onTouchEvent(motionEvent)
-            }
-        }
-        if (isEnable.not())   {
-            exo_progress.isEnabled = false
         }
     }
 
@@ -381,6 +401,8 @@ open class AKVideoView : PlayerView {
 
     private fun openFullscreenDialog() {
 
+        currentResizeMode = resizeMode
+
         (context as Activity).requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
         (this.parent as ViewGroup).removeView(this)
@@ -411,6 +433,8 @@ open class AKVideoView : PlayerView {
         exoPlayerFullscreen = false
         fullScreenDialog?.dismiss()
         fullScreenButton?.isSelected = false
+
+        resizeMode = currentResizeMode
     }
 
     private fun initFullscreenButton() {

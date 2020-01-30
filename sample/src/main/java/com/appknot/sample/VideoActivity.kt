@@ -15,6 +15,8 @@ class VideoActivity : AppCompatActivity() {
 
         vv_sample.run {
 
+            isEnableSeekBar = false
+            canFewForward = true
             parentView = fl_media_frame
             setVideoURI(arrayOf(Uri.parse("https://s3.ap-northeast-2.amazonaws.com/apne2-apprd-tr-static/564a2d537fb62ac70387a3e65cccabbd96dc5ba9.mp4")))
             abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
