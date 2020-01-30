@@ -105,6 +105,7 @@ open class AKVideoView : PlayerView {
     }
     var canRewind = true
     var canFewForward = true
+    var isEnable = true
 
     /**
      * 풀스크린 버튼 사용시 반드시 값을 넣어주세요
@@ -267,6 +268,9 @@ open class AKVideoView : PlayerView {
             fl_ffwd.setOnTouchListener { view, motionEvent ->
                 return@setOnTouchListener ffwdDetector.onTouchEvent(motionEvent)
             }
+        }
+        if (isEnable.not())   {
+            exo_progress.isEnabled = false
         }
     }
 
