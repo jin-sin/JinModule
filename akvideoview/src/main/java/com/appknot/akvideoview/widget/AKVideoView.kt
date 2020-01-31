@@ -98,7 +98,7 @@ open class AKVideoView : PlayerView {
 
     private var fullScreenDialog: Dialog? = null
     private var exoPlayerFullscreen = false
-    private var fullScreenButton: ImageButton? = null
+    var fullScreenButton: ImageButton? = null
     var fullScreenButtonListener = OnClickListener {
         if (!exoPlayerFullscreen)
             openFullscreenDialog()
