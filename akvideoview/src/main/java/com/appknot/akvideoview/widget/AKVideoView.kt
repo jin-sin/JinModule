@@ -133,6 +133,10 @@ open class AKVideoView : PlayerView {
                 false -> exo_progress.visibility = View.INVISIBLE
             }
         }
+    var controllerShowTimerMs = 3000
+    set(value) {
+        controllerShowTimeoutMs = value
+    }
     var currentResizeMode = resizeMode
 
     /**
@@ -288,10 +292,7 @@ open class AKVideoView : PlayerView {
 
             return@setOnTouchListener false
         }
-        if (canRewind) {
-        }
-        if (canFewForward) {
-        }
+        controllerShowTimeoutMs = this.controllerShowTimerMs
     }
 
     fun createPlayer() {
@@ -401,7 +402,7 @@ open class AKVideoView : PlayerView {
 
     private fun openFullscreenDialog() {
 
-        currentResizeMode = resizeMode
+//        currentResizeMode = resizeMode
 
         (context as Activity).requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
@@ -420,7 +421,7 @@ open class AKVideoView : PlayerView {
                 it.show()
         }
 
-        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT
+//        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT
     }
 
 
@@ -434,7 +435,7 @@ open class AKVideoView : PlayerView {
         fullScreenDialog?.dismiss()
         fullScreenButton?.isSelected = false
 
-        resizeMode = currentResizeMode
+//        resizeMode = currentResizeMode
     }
 
     private fun initFullscreenButton() {
