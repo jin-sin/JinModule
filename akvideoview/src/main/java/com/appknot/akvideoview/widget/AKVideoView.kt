@@ -168,6 +168,7 @@ open class AKVideoView : PlayerView {
         player?.let {
             it.seekTo(0)
             it.playWhenReady = true
+            player?.let { onPlayingListener?.invoke(it) }
         }
     }
 
@@ -177,6 +178,7 @@ open class AKVideoView : PlayerView {
 
     fun pause() {
         player?.playWhenReady = false
+        onPauseListener?.invoke()
     }
 
     fun seekTo(msec: Long) {
