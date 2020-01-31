@@ -459,9 +459,9 @@ open class AKVideoView : PlayerView {
         if (useController) {
             exo_controller?.let {
                 if (it.isShown) {
-                    it.hide()
+                    hideController()
                 } else {
-                    it.show()
+                    showController()
                 }
             }
         }
