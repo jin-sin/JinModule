@@ -290,7 +290,7 @@ open class AKVideoView : PlayerView {
                 MotionEvent.ACTION_DOWN -> toggleMediaControlsVisibility()
             }
 
-            return@setOnTouchListener false
+            return@setOnTouchListener true
         }
         controllerShowTimeoutMs = this.controllerShowTimerMs
     }
@@ -467,5 +467,9 @@ open class AKVideoView : PlayerView {
         }
     }
 
+    override fun setOnTouchListener(listener: OnTouchListener)    {
+        super.setOnTouchListener(listener)
+        exo_overlay.setOnTouchListener(listener)
+    }
 
 }
