@@ -136,9 +136,9 @@ open class AKVideoView : PlayerView {
             }
         }
     var controllerShowTimerMs = 3000
-    set(value) {
-        controllerShowTimeoutMs = value
-    }
+        set(value) {
+            controllerShowTimeoutMs = value
+        }
     var currentResizeMode = resizeMode
 
     /**
@@ -461,19 +461,17 @@ open class AKVideoView : PlayerView {
     }
 
 
-    private fun toggleMediaControlsVisibility() {
-        if (useController) {
-            exo_controller?.let {
-                if (it.isShown) {
-                    hideController()
-                } else {
-                    showController()
-                }
+    fun toggleMediaControlsVisibility() {
+        exo_controller?.let {
+            if (it.isShown) {
+                hideController()
+            } else {
+                showController()
             }
         }
     }
 
-    override fun setOnTouchListener(listener: OnTouchListener)    {
+    override fun setOnTouchListener(listener: OnTouchListener) {
         super.setOnTouchListener(listener)
         exo_overlay.setOnTouchListener(listener)
     }
