@@ -474,4 +474,13 @@ open class AKVideoView : PlayerView {
         exo_overlay.setOnTouchListener(listener)
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return super.onTouchEvent(event)
+        exo_overlay.onTouchEvent(event)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        return super.dispatchTouchEvent(ev)
+        exo_overlay.dispatchTouchEvent(ev)
+    }
 }
