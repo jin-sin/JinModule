@@ -107,7 +107,9 @@ open class AKVideoView : PlayerView {
     }
         set(value) {
             fullScreenButton?.setOnClickListener(value)
+            isCustomizeFullScreen = true
         }
+    var isCustomizeFullScreen = false
     var canRewind = true
         set(value) {
             when (value) {
@@ -450,9 +452,11 @@ open class AKVideoView : PlayerView {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        when (newConfig.orientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> openFullscreenDialog()
-            Configuration.ORIENTATION_PORTRAIT -> parentView?.let { closeFullscreenDialog(it) }
+        if (!isCustomizeFullScreen) {
+            when (newConfig.orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> openFullscreenDialog()
+                Configuration.ORIENTATION_PORTRAIT -> parentView?.let { closeFullscreenDialog(it) }
+            }
         }
     }
 
