@@ -18,7 +18,7 @@ class MainActivity : PhotoAttachableActivity() {
         setContentView(R.layout.activity_main)
 
 //        showImageAlert()
-        startActivity<VideoActivity>()
+        startActivity<PdfViewActivity>()
     }
 
 

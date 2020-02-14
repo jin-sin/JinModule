@@ -13,7 +13,7 @@ import java.util.ArrayList
 
 class PdfViewActivity : AppCompatActivity() {
 
-    val pdf = File(Environment.getExternalStorageDirectory().absolutePath + "/Download/iot.pdf")
+    val pdf = File(Environment.getExternalStorageDirectory().absolutePath + "/Download/jeju.pdf")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

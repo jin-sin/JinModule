@@ -36,7 +36,7 @@ class AKCanvas : AppCompatImageView {
     private val INVALID_POINTER_ID = -1
     private var activePointerId = INVALID_POINTER_ID
 
-    lateinit var onLayoutListener: (Canvas) -> Unit
+    var onLayoutListener: ((Canvas) -> Unit)? = null
     init {
 
         paint.color = Color.RED
@@ -142,7 +142,7 @@ class AKCanvas : AppCompatImageView {
             canvas = Canvas(it)
             draw(canvas)
 
-            canvas?.let { canvas -> onLayoutListener.invoke(canvas) }
+            canvas?.let { canvas -> onLayoutListener?.invoke(canvas) }
         }
     }
 
