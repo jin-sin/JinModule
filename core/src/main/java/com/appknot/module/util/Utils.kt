@@ -1,13 +1,29 @@
 package com.appknot.module.util
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.*
 import android.media.ExifInterface
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.net.wifi.WifiInfo
+import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Environment
+import android.text.Html
+import android.text.Spanned
+import androidx.core.app.ActivityCompat
 import java.io.*
+import java.math.BigInteger
+import java.net.InetAddress
 import java.nio.channels.FileChannel
 import java.text.DecimalFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -44,6 +60,74 @@ fun Int.stringForTime(): String {
     }
 }
 
+/**
+ * 오늘 날짜시간 문자열을 얻는다
+ */
+
+private val locale = Locale.KOREA
+
+fun getTodayDate(): String =
+    SimpleDateFormat("yyyy-MM-dd HH:mm:ss", locale).format(Date())
+
+/**
+ * 날짜 문자열을 앱에서 원하는 포맷의 날짜 문자열로 변경
+ * @param dateStr 원본 날짜시간 문자열
+ * @param formatStr 변환을 원하는 날짜시간 형식 포맷
+ * @return 변환된 날짜시간 문자열
+ */
+fun formatDate(dateStr: String, formatStr: String): String = try {
+    val srcFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", locale)
+    val dateFormat = SimpleDateFormat(formatStr, locale)
+    dateFormat.format(srcFormat.parse(dateStr))
+} catch (e: ParseException) {
+    dateStr
+}
+
+fun convertHtmlStr(text: String): Spanned =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
+    } else {
+        Html.fromHtml(text)
+    }
+
+fun getDeviceName(): String = BluetoothAdapter.getDefaultAdapter().name
+
+fun getModel(): String = Build.MODEL
+
+fun Context.getVersionName(): String =
+    this.packageManager.getPackageInfo(this.packageName, 0).versionName
+
+@SuppressLint("MissingPermission")
+fun Context.isWIFIConnected(): Boolean {
+    var result = false
+
+    val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (cm != null) {
+        val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+        if (capabilities != null) {
+            result = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+        }
+    }
+
+    return result
+}
+
+@SuppressLint("MissingPermission")
+private fun getWIFIInfo(applicationContext: Context): WifiInfo {
+    val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+    return wifiManager.connectionInfo
+}
+
+fun getSSID(applicationContext: Context): String = getWIFIInfo(applicationContext).ssid
+
+fun getWIFIIp(applicationContext: Context): String {
+    val ipAddress =
+        BigInteger.valueOf(getWIFIInfo(applicationContext).ipAddress.toLong()).toByteArray()
+    val address = InetAddress.getByAddress(ipAddress)
+
+    return address.hostAddress
+}
 
 /**
  * 카메라 관련 함수
