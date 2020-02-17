@@ -1,4 +1,4 @@
-package com.appknot.seotda.extensions
+package com.appknot.module.extensions
 
 import android.content.Context
 import android.view.View

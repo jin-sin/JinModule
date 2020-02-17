@@ -5,8 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.AsyncTask
 import android.widget.ProgressBar
-import com.appknot.seotda.extensions.hideLoadingDialog
-import com.appknot.seotda.extensions.showLoadingDialog
+import com.appknot.module.extensions.hideLoadingDialog
+import com.appknot.module.extensions.showLoadingDialog
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.internal.LinkedTreeMap
