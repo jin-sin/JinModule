@@ -1,4 +1,4 @@
-package com.appknot.module.view
+package com.appknot.core_rx.view
 
 import android.Manifest
 import android.app.Activity
@@ -19,10 +19,10 @@ import android.provider.MediaStore
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.FileProvider
-import com.appknot.module.R
-import com.appknot.module.util.*
-import com.appknot.module.view.PhotoAttachableActivity.ACTIVITY_REQUEST_CODE.Companion.PICK_CHOOSER_REQUEST_CODE
+import com.appknot.core_rx.R
+import com.appknot.core_rx.util.*
+import com.appknot.core_rx.view.PhotoAttachableActivity.ACTIVITY_REQUEST_CODE.Companion.PICK_CHOOSER_REQUEST_CODE
+import io.reactivex.subjects.BehaviorSubject
 import java.io.File
 import java.io.IOException
 
@@ -50,7 +50,7 @@ abstract class PhotoAttachableActivity : AppCompatActivity() {
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
     }
-    
+
     fun permissionCheck(reqPermission: Array<String>, reqCode: Int): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             var isDenied = false
@@ -60,11 +60,11 @@ abstract class PhotoAttachableActivity : AppCompatActivity() {
                     break
                 }
             }
-            if (isDenied) {
+            return if (isDenied) {
                 requestPermissions(reqPermission, reqCode)
-                return false
+                false
             } else {
-                return true
+                true
             }
         } else {
             return true
@@ -111,12 +111,9 @@ abstract class PhotoAttachableActivity : AppCompatActivity() {
 
     private val IMAGE_SIZE = 500
 
-
-    fun takePicture(bm: Bitmap) {}
-
     fun onUIRefresh() {}
 
-    abstract var takePickerListener: (Bitmap) -> Unit
+    val photo: BehaviorSubject<Bitmap> = BehaviorSubject.createDefault(null)
 
 
     var cropRatio: Int = 0
@@ -224,12 +221,7 @@ abstract class PhotoAttachableActivity : AppCompatActivity() {
 
     fun doFinalProcess() {
         val bm = BitmapFactory.decodeFile(getTempImageFile(this).absolutePath)
-        if (takePickerListener != null) {
-//            takePickerListener?.takePicture(bm)
-            takePickerListener.invoke(bm)
-        } else {
-            takePicture(bm)
-        }
+        photo.onNext(bm)
     }
 
     fun crop() {}
