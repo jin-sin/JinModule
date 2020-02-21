@@ -21,30 +21,25 @@ import com.bumptech.glide.request.target.ViewTarget
  * @author Jin on 2020-02-21
  */
 
-fun ImageView.loadImage(url: String)    {
-    GlideApp.with(this.context)
-        .load(url)
+fun ImageView.loadImage( url: String, glideRequest: GlideRequest<Drawable> = GlideApp.with(this.context).load(url))    {
+    glideRequest
         .into(this)
 }
 
-fun ImageView.loadImageWithPlaceHolder(url: String, resId: Int) {
-    GlideApp.with(this.context)
-        .load(url)
+fun ImageView.loadImageWithPlaceHolder(url: String, resId: Int, glideRequest: GlideRequest<Drawable> = GlideApp.with(this.context).load(url)) {
+    glideRequest
         .placeholder(resId)
         .into(this)
 }
 
-fun ImageView.loadImageWithPlaceHolder(url: String, drawable: Drawable) {
-    GlideApp.with(this.context)
-        .load(url)
+fun ImageView.loadImageWithPlaceHolder(url: String, drawable: Drawable, glideRequest: GlideRequest<Drawable> = GlideApp.with(this.context).load(url)) {
+    glideRequest
         .placeholder(drawable)
         .into(this)
 }
 
-fun ImageView.loadImageToBitmap(url: String)    {
-    GlideApp.with(this.context)
-        .asBitmap()
-        .load(url)
+fun ImageView.loadImageToBitmap(url: String, glideRequest: GlideRequest<Bitmap> = GlideApp.with(this.context).asBitmap().load(url))    {
+    glideRequest
         .listener(object : RequestListener<Bitmap>  {
             override fun onLoadFailed(
                 e: GlideException?,
