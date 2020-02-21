@@ -17,7 +17,7 @@ abstract class RxBaseActivity<T: ViewDataBinding, R: BaseViewModel> : AppCompatA
 
     /**
      * setContentView로 호출할 Layout의 리소스 Id.
-     * ex) R.layout.activity_sbs_main
+     * ex) R.layout.activity_main
      */
     abstract val layoutResourceId: Int
 
