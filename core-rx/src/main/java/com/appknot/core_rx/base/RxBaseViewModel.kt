@@ -14,7 +14,7 @@ import io.reactivex.disposables.Disposable
  * @author Jin on 2020-02-21
  */
 
-open class BaseViewModel : ViewModel() {
+open class RxBaseViewModel : ViewModel() {
 
     // 일회성 이벤트를 만들어 내는 라이브 이벤트
     // 뷰는 이러한 이벤트를 바인딩하고 있다가, 적절한 상황이 되면 액티비티를 호출하거나 스낵바를 만듬

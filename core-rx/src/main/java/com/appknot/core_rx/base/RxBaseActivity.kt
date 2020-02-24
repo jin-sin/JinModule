@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar
  * @author Jin on 2020-02-21
  */
 
-abstract class RxBaseActivity<T: ViewDataBinding, R: BaseViewModel> : AppCompatActivity()   {
+abstract class RxBaseActivity<T: ViewDataBinding, R: RxBaseViewModel> : AppCompatActivity()   {
 
     lateinit var viewDataBinding: T
 

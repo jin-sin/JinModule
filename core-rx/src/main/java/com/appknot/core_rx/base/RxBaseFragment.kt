@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar
  * @author Jin on 2020-02-24
  */
 
-abstract class RxBaseFragment<T: ViewDataBinding, R: BaseViewModel> : Fragment()    {
+abstract class RxBaseFragment<T: ViewDataBinding, R: RxBaseViewModel> : Fragment()    {
     lateinit var viewDataBinding: T
 
     abstract val layoutResourceId: Int
