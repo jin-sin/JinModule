@@ -1,6 +1,7 @@
 package com.appknot.core_rx.base
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -55,6 +56,7 @@ abstract class RxBaseActivity<T: ViewDataBinding, R: BaseViewModel> : AppCompatA
         viewDataBinding = DataBindingUtil.setContentView(this, layoutResourceId)
 
         snackbarObserving()
+        toastObserving()
         initStartView()
         initDataBinding()
         initAfterBinding()
@@ -66,6 +68,15 @@ abstract class RxBaseActivity<T: ViewDataBinding, R: BaseViewModel> : AppCompatA
         }
         viewModel.observeSnackbarMessageStr(this){
             Snackbar.make(findViewById(android.R.id.content), it, Snackbar.LENGTH_LONG).show()
+        }
+    }
+
+    private fun toastObserving()    {
+        viewModel.observeToastMessage(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
+        viewModel.observeToastMessageStr(this)   {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
     }
 }
