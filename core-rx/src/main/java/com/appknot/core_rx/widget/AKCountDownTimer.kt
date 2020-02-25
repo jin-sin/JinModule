@@ -6,6 +6,8 @@ import android.os.Handler
  *
  * @author Jin on 2019-08-08
  */
+
+@Deprecated("use startTimer and observeTimer in RxBaseViewModel")
 abstract class AKCountDownTimer(pMillisInFuture: Long, pCountDownInterval: Long) {
     private var millisInFuture = pMillisInFuture
     private var countDownInterval = pCountDownInterval
