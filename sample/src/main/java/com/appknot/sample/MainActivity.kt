@@ -17,8 +17,7 @@ class MainActivity : PhotoAttachableActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        showImageAlert()
-        startActivity<PdfViewActivity>()
+        startActivity<TimerActivity>()
     }
 
 

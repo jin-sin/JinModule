@@ -26,12 +26,16 @@ android {
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
     implementation project(':core')
     implementation project(':akpdfviewer')
     implementation project(':akvideoview')
+    implementation project(':core-rx')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
