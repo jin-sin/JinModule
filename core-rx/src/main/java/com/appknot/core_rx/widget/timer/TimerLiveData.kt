@@ -20,12 +20,6 @@ class TimerLiveData : MutableLiveData<Long>()    {
 
     override fun onActive() {
         timer = Timer()
-//        timer?.scheduleAtFixedRate(object : TimerTask() {
-//            override fun run() {
-//                val newValue = (SystemClock.elapsedRealtime() - initialTime) / 1000
-//                postValue(newValue)
-//            }
-//        }, delay, period)
     }
 
     override fun onInactive() {
@@ -37,7 +31,6 @@ class TimerLiveData : MutableLiveData<Long>()    {
             timer?.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     val newValue = (SystemClock.elapsedRealtime() - initialTime) / 1000
-//                    postValue(newValue)
                     observer(newValue)
                 }
             }, it, period)
