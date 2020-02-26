@@ -1,11 +1,10 @@
 package com.appknot.core_rx.base
 
+import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import com.appknot.core_rx.util.SnackbarMessage
-import com.appknot.core_rx.util.SnackbarMessageString
-import com.appknot.core_rx.util.ToastMessage
-import com.appknot.core_rx.util.ToastMessageString
+import com.appknot.core_rx.util.*
 import com.appknot.core_rx.widget.timer.TimerLiveData
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -26,6 +25,8 @@ open class RxBaseViewModel : ViewModel() {
     private val toastMessageString = ToastMessageString()
 
     private val timer = TimerLiveData()
+
+    private val intentLiveEvent = IntentLiveEvent()
 
     /**
      * RxJava 의 observing을 위한 부분.
@@ -65,6 +66,10 @@ open class RxBaseViewModel : ViewModel() {
         timer.postValue(delay)
     }
 
+    fun launchActivity(intent: Intent)    {
+        intentLiveEvent.value = intent
+    }
+
     /**
      * RxBaseActivity 에서 쓰는 함수
      */
@@ -82,5 +87,8 @@ open class RxBaseViewModel : ViewModel() {
     }
     fun observeTimer(lifeCycleOwner: LifecycleOwner, ob: (Long) -> Unit)    {
         timer.observe(lifeCycleOwner, ob)
+    }
+    fun observeIntent(lifeCycleOwner: LifecycleOwner, ob: (Intent) -> Unit) {
+        intentLiveEvent.observe(lifeCycleOwner, ob)
     }
 }

@@ -1,10 +1,12 @@
 package com.appknot.core_rx.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.appknot.core_rx.extensions.intentFor
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -57,6 +59,8 @@ abstract class RxBaseActivity<T: ViewDataBinding, R: RxBaseViewModel> : AppCompa
 
         snackbarObserving()
         toastObserving()
+        intentObserving()
+
         initStartView()
         initDataBinding()
         initAfterBinding()
@@ -77,6 +81,12 @@ abstract class RxBaseActivity<T: ViewDataBinding, R: RxBaseViewModel> : AppCompa
         }
         viewModel.observeToastMessageStr(this)   {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun intentObserving()   {
+        viewModel.observeIntent(this)   {
+            startActivity(it)
         }
     }
 }
