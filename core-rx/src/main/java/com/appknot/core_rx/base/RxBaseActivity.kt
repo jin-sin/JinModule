@@ -84,6 +84,12 @@ abstract class RxBaseActivity<T: ViewDataBinding, R: RxBaseViewModel> : AppCompa
         }
     }
 
+    fun timerObserving(completion: (Boolean) -> Unit)    {
+        viewModel.observeTimer(this)    {
+            completion(true)
+        }
+    }
+
     private fun intentObserving()   {
         viewModel.observeIntent(this)   {
             startActivity(it)

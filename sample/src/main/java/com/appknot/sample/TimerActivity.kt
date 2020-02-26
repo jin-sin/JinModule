@@ -15,12 +15,10 @@ class TimerActivity : RxBaseActivity<ActivityTimerBinding, TimerViewModel>() {
     }
 
     override fun initDataBinding() {
-        viewModel.observeTimer(this)    {
-            finish()
-        }
-        viewModel.startTimer(2000L, 2000L)
     }
 
     override fun initAfterBinding() {
+        timerObserving { finish() }
+        viewModel.startTimer(2000L, 2000L)
     }
 }
