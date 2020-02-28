@@ -17,7 +17,10 @@ import java.util.*
 
 val CODE_SUCCESS = "0"
 
-
+/**
+ * Rx로 구현한 ApiResponse 기반의 응답처리 익스텐션
+ * 1회성의 Observable (Single) 을 리턴하여 구독할수 있도록 한
+ * */
 fun <T : Response<ApiResponse>> Single<T>.api(): Single<ApiResponse> =
     networkThread()
         .flatMap { response ->
