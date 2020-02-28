@@ -31,7 +31,13 @@ class TimerLiveData : SingleLiveEvent<Long>()    {
             timer?.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     val newValue = (SystemClock.elapsedRealtime() - initialTime) / 1000
-                    observer(newValue)
+                    if (it == period) {
+                        if (it == newValue * 1000) {
+                            observer(newValue)
+                        }
+                    } else {
+                        observer(newValue)
+                    }
                 }
             }, it, period)
         })
