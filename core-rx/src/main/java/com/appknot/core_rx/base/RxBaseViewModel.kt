@@ -62,7 +62,7 @@ open class RxBaseViewModel : ViewModel() {
 
     fun startTimer(delay: Long, period: Long) {
         timer.period = period
-        timer.postValue(delay)
+        timer.value = delay
     }
 
     /**
