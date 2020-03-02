@@ -60,9 +60,10 @@ open class RxBaseViewModel : ViewModel() {
         toastMessageString.value = str
     }
 
-    fun startTimer(delay: Long, period: Long) {
-        timer.period = period
-        timer.value = delay
+    fun startTimer(millisInFuture: Long, countDownInterval: Long) {
+        timer.millisInFuture = millisInFuture
+        timer.countDownInterval = countDownInterval
+        timer.value = millisInFuture
     }
 
     /**
@@ -80,7 +81,7 @@ open class RxBaseViewModel : ViewModel() {
     fun observeToastMessageStr(lifeCycleOwner: LifecycleOwner, ob: (String) -> Unit) {
         toastMessageString.observe(lifeCycleOwner, ob)
     }
-    fun observeTimer(lifeCycleOwner: LifecycleOwner, ob: (Long) -> Unit)    {
-        timer.observe(lifeCycleOwner, ob)
+    fun observeTimer(lifeCycleOwner: LifecycleOwner, finishOb: (Long) -> Unit, tickOb: (Long) -> Unit)    {
+        timer.observe(lifeCycleOwner, finishOb, tickOb)
     }
 }

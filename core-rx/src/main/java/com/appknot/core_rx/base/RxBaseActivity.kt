@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar
  * @author Jin on 2020-02-21
  */
 
-abstract class RxBaseActivity<T: ViewDataBinding, R: RxBaseViewModel> : AppCompatActivity()   {
+abstract class RxBaseActivity<T : ViewDataBinding, R : RxBaseViewModel> : AppCompatActivity() {
 
     lateinit var viewDataBinding: T
 
@@ -66,23 +66,26 @@ abstract class RxBaseActivity<T: ViewDataBinding, R: RxBaseViewModel> : AppCompa
         viewModel.observeSnackbarMessage(this) {
             Snackbar.make(findViewById(android.R.id.content), it, Snackbar.LENGTH_LONG).show()
         }
-        viewModel.observeSnackbarMessageStr(this){
+        viewModel.observeSnackbarMessageStr(this) {
             Snackbar.make(findViewById(android.R.id.content), it, Snackbar.LENGTH_LONG).show()
         }
     }
 
-    private fun toastObserving()    {
+    private fun toastObserving() {
         viewModel.observeToastMessage(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
-        viewModel.observeToastMessageStr(this)   {
+        viewModel.observeToastMessageStr(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun timerObserving(completion: (Boolean) -> Unit)    {
-        viewModel.observeTimer(this)    {
-            completion(true)
-        }
+    fun timerObserving(completion: (Long) -> Unit) {
+        viewModel.observeTimer(this, {
+            completion(it)
+        },
+            {
+                completion(it)
+            })
     }
 }

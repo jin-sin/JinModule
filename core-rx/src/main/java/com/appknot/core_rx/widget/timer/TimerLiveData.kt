@@ -1,9 +1,10 @@
 package com.appknot.core_rx.widget.timer
 
+import android.os.Handler
 import android.os.SystemClock
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.appknot.core_rx.util.SingleLiveEvent
 import java.util.*
 
@@ -12,34 +13,35 @@ import java.util.*
  * @author Jin on 2020-02-24
  */
 
-class TimerLiveData : SingleLiveEvent<Long>()    {
+class TimerLiveData : MutableLiveData<Long>()    {
 
-    var period = 1000L
-    val initialTime: Long = SystemClock.elapsedRealtime()
-    var timer: Timer? = null
-
-    override fun onActive() {
-        timer = Timer()
-    }
+    var millisInFuture = 1000L
+    var countDownInterval = 1000L
+    lateinit var counter: Runnable
+    lateinit var handler: Handler
 
     override fun onInactive() {
-        timer?.cancel()
+        handler?.removeCallbacks(counter)
     }
 
-    fun observe(owner: LifecycleOwner, observer: (Long) -> Unit) {
-        super.observe(owner, androidx.lifecycle.Observer {
-            timer?.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() {
-                    val newValue = (SystemClock.elapsedRealtime() - initialTime) / 1000
-                    if (it == period) {
-                        if (it == newValue * 1000) {
-                            observer(newValue)
-                        }
+    fun observe(owner: LifecycleOwner, finishObserver: (Long) -> Unit, tickObserver: (Long) -> Unit) {
+        handler = Handler()
+        counter = Runnable {
+            super.observe(owner, Observer {
+                it?.run {
+                    if (millisInFuture <= 0) {
+                        //Done
+                        finishObserver(millisInFuture)
                     } else {
-                        observer(newValue)
+                        tickObserver(millisInFuture)
+                        millisInFuture -= countDownInterval
+                        handler.postDelayed(counter, countDownInterval)
                     }
                 }
-            }, it, period)
-        })
+            })
+
+        }
+
+        handler.post(counter)
     }
 }
