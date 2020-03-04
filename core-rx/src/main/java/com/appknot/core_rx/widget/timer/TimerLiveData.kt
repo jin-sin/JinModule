@@ -21,6 +21,10 @@ class TimerLiveData : MutableLiveData<Long>()    {
     lateinit var handler: Handler
 
     override fun onInactive() {
+        stopTimer()
+    }
+
+    fun stopTimer() {
         handler?.removeCallbacks(counter)
     }
 

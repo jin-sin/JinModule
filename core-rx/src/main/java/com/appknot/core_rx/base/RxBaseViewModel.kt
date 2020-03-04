@@ -66,6 +66,10 @@ open class RxBaseViewModel : ViewModel() {
         timer.value = millisInFuture
     }
 
+    fun stopTimer() {
+        timer.stopTimer()
+    }
+
     /**
      * RxBaseActivity 에서 쓰는 함수
      */
