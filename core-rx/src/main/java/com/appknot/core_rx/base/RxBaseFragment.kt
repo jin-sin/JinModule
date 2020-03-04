@@ -85,4 +85,13 @@ abstract class RxBaseFragment<T: ViewDataBinding, R: RxBaseViewModel> : Fragment
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
     }
+
+    fun timerObserving(completion: (Long) -> Unit) {
+        viewModel.observeTimer(this, {
+            completion(it)
+        },
+            {
+                completion(it)
+            })
+    }
 }
