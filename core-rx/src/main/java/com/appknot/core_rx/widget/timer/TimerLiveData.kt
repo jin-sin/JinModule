@@ -36,6 +36,7 @@ class TimerLiveData : MutableLiveData<Long>()    {
                     if (millisInFuture <= 0) {
                         //Done
                         finishObserver(millisInFuture)
+                        stopTimer()
                     } else {
                         tickObserver(millisInFuture)
                         millisInFuture -= countDownInterval
