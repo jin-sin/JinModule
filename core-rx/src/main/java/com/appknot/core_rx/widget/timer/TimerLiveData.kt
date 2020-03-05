@@ -17,7 +17,7 @@ class TimerLiveData : MutableLiveData<Long>() {
 
     var millisInFuture = 1000L
     var countDownInterval = 1000L
-    lateinit var counter: Runnable
+    var counter: Runnable? = null
     lateinit var handler: Handler
 
     override fun onInactive() {
@@ -25,7 +25,8 @@ class TimerLiveData : MutableLiveData<Long>() {
     }
 
     fun stopTimer() {
-        handler?.removeCallbacks(counter)
+        counter?.let { handler?.removeCallbacks(it) }
+
     }
 
     fun observe(
