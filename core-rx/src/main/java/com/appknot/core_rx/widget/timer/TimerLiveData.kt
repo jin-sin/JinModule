@@ -13,7 +13,7 @@ import java.util.*
  * @author Jin on 2020-02-24
  */
 
-class TimerLiveData : MutableLiveData<Long>()    {
+class TimerLiveData : MutableLiveData<Long>() {
 
     var millisInFuture = 1000L
     var countDownInterval = 1000L
@@ -28,10 +28,14 @@ class TimerLiveData : MutableLiveData<Long>()    {
         handler?.removeCallbacks(counter)
     }
 
-    fun observe(owner: LifecycleOwner, finishObserver: (Long) -> Unit, tickObserver: (Long) -> Unit) {
+    fun observe(
+        owner: LifecycleOwner,
+        finishObserver: (Long) -> Unit,
+        tickObserver: (Long) -> Unit
+    ) {
         handler = Handler()
-        counter = Runnable {
-            super.observe(owner, Observer {
+        super.observe(owner, Observer {
+            counter = Runnable {
                 it?.run {
                     if (millisInFuture <= 0) {
                         //Done
@@ -43,10 +47,10 @@ class TimerLiveData : MutableLiveData<Long>()    {
                         handler.postDelayed(counter, countDownInterval)
                     }
                 }
-            })
+            }
 
-        }
+            handler.post(counter)
 
-        handler.post(counter)
+        })
     }
 }
