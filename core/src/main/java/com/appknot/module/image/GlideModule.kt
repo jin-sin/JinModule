@@ -7,6 +7,8 @@ import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomViewTarget
+import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.target.ViewTarget
 
 
@@ -17,7 +19,6 @@ import com.bumptech.glide.request.target.ViewTarget
 @GlideModule
 class GlideModule : AppGlideModule() {
     override fun applyOptions(context: Context, builder: GlideBuilder) {
-        ViewTarget.setTagId(R.string.app_name)
         builder.setDefaultRequestOptions(RequestOptions().format(DecodeFormat.PREFER_RGB_565))
     }
 }
