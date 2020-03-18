@@ -127,6 +127,25 @@ fun getWIFIIp(applicationContext: Context): String {
 }
 
 /**
+ * 앱이 최신 버전인지 확인한다.
+ * @param localVersion 앱의 현재 버전 문자열
+ * @param targetVersion 업데이트 대상이 될 최신 버전 문자열
+ * @return 최신 버전이라면 true, 아니라면 false
+ */
+fun checkIsNewestVersion(localVersion: String, targetVersion: String): Boolean {
+    val localVersionMajor = localVersion.substringBefore(".").toInt()
+    val targetVersionMajor = targetVersion.substringBefore(".").toInt()
+    val localVersionMinor = localVersion.substringAfter(".").toInt()
+    val targetVersionMinor = targetVersion.substringAfter(".").toInt()
+
+    return when {
+        localVersionMajor > targetVersionMajor -> true
+        localVersionMajor < targetVersionMajor -> false
+        else -> localVersionMinor >= targetVersionMinor
+    }
+}
+
+/**
  * 카메라 관련 함수
  * -----------------------------------------------------------------*/
 private val IMAGE_SIZE = 500
