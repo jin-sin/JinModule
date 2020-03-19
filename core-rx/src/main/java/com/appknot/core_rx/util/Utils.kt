@@ -3,6 +3,7 @@ package com.appknot.core_rx.util
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.*
 import android.media.ExifInterface
 import android.net.ConnectivityManager
@@ -143,6 +144,16 @@ fun checkIsNewestVersion(localVersion: String, targetVersion: String): Boolean {
         localVersionMajor < targetVersionMajor -> false
         else -> localVersionMinor >= targetVersionMinor
     }
+}
+
+/**
+ * 해당 앱(패키지)가 설치되어 있는지 확인한다.
+ */
+fun isAppInstalled(context: Context, packageName: String): Boolean = try {
+    context.packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
+    true
+} catch (e: PackageManager.NameNotFoundException) {
+    false
 }
 
 /**
