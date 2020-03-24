@@ -13,7 +13,7 @@ import java.util.*
  * @author Jin on 2020-02-24
  */
 
-class TimerLiveData : MutableLiveData<Long>() {
+class TimerLiveData : SingleLiveEvent<Long>() {
 
     var millisInFuture = 1000L
     var countDownInterval = 1000L
