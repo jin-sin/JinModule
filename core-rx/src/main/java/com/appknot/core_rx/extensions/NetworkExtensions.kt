@@ -44,42 +44,40 @@ fun <T> Single<T>.networkThread(): Single<T> =
 
 /**
  * JSON 정보 담고 있는 맵을 자바 객체로 변환
- * @param data JSON 정보를 담고 있는 맵 객체
  * @param modelType 결과를 담을 자바 객체 클래스 타입
  * @return 변환 완료된 자바 객체 클래스 타입의 인스턴스
  */
-fun <T> parse(data: Any, modelType: Class<T>): T {
-    val jsonStr = Gson().toJson(data)
+fun <T> Any.parse(modelType: Class<T>): T {
+    val jsonStr = Gson().toJson(this)
     return Gson().fromJson(jsonStr, modelType)
 }
 
-fun <T> parse(jsonStr: String, modelType: Class<T>): T {
-    return Gson().fromJson(jsonStr, modelType)
+fun <T> String.parse(modelType: Class<T>): T {
+    return Gson().fromJson(this, modelType)
 }
 
 /**
  * JSON 정보 담고 있는 맵 형식 객체를 자바 객체 콜렉션으로 변환
- * @param data JSON 정보를 담고 있는 맵 객체
  * @param modelType 결과를 담을 자바 객체 배열 클래스 타입
  * @return 변환 완료된 자바 객체 클래스 타입의 콜렉션 인스턴스
  */
-fun <T> parse(data: Any, modelType: Class<Array<T>>): ArrayList<T> {
-    val jsonStr = Gson().toJson(data)
+fun <T> Any.parse(modelType: Class<Array<T>>): ArrayList<T> {
+    val jsonStr = Gson().toJson(this)
     val resultArr = Gson().fromJson(jsonStr, modelType)
     return ArrayList(resultArr.asList())
 }
 
-fun toMap(data: Any): LinkedTreeMap<Any, *> {
+fun Any.toMap(): LinkedTreeMap<Any, *> {
     return try {
-        data as LinkedTreeMap<Any, *>
+        this as LinkedTreeMap<Any, *>
     } catch (e: ClassCastException) {
         LinkedTreeMap<Any, Any>()
     }
 }
 
-fun toList(data: Any): ArrayList<*> {
+fun Any.toList(): ArrayList<*> {
     return try {
-        data as ArrayList<*>
+        this as ArrayList<*>
     } catch (e: ClassCastException) {
         ArrayList<String>()
     }
