@@ -176,6 +176,7 @@ open class AKVideoView : PlayerView {
 
     fun stop() {
         player?.stop()
+        releasePlayer()
     }
 
     fun pause() {
