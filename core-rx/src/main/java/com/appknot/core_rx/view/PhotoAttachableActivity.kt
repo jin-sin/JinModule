@@ -23,6 +23,7 @@ import com.appknot.core_rx.R
 import com.appknot.core_rx.util.*
 import com.appknot.core_rx.view.PhotoAttachableActivity.ACTIVITY_REQUEST_CODE.Companion.PICK_CHOOSER_REQUEST_CODE
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import java.io.File
 import java.io.IOException
 
@@ -113,7 +114,7 @@ abstract class PhotoAttachableActivity : AppCompatActivity() {
 
     fun onUIRefresh() {}
 
-    val photo: BehaviorSubject<Bitmap> = BehaviorSubject.createDefault(null)
+    val photo: PublishSubject<Bitmap> = PublishSubject.create()
 
 
     var cropRatio: Int = 0
