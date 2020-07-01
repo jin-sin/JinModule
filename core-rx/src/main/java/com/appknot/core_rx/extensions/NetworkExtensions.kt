@@ -4,9 +4,9 @@ import com.appknot.core_rx.api.ApiResponse
 import com.appknot.core_rx.api.ApiResponseException
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.Response
 import java.util.*
 
