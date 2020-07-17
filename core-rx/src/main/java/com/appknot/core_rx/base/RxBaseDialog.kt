@@ -15,7 +15,7 @@ import java.util.jar.Attributes
 
 abstract class RxBaseDialog<T : ViewDataBinding, R : RxBaseViewModel>(context: Context, themeResId: Int) : Dialog(context, themeResId) {
 
-    constructor(context: Context) : this(context, android.R.style.Theme_Dialog)
+    constructor(context: Context) : this(context, android.R.style.Theme_Material_Light_Dialog)
 
     lateinit var viewDataBinding: T
 
