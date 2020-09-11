@@ -18,8 +18,12 @@ class VideoActivity : AppCompatActivity() {
             isEnableSeekBar = false
             canFewForward = true
             parentView = fl_media_frame
+            isPlayback = true
             setVideoURI(arrayOf(Uri.parse("https://s3.ap-northeast-2.amazonaws.com/apne2-apprd-tr-static/564a2d537fb62ac70387a3e65cccabbd96dc5ba9.mp4")))
-            abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
+//            abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
+            title = "TRSquare"
+            subText = "브랜드캠퍼스"
+            iconResId = null
             start()
 
             setOnCompletionListener {
@@ -28,19 +32,24 @@ class VideoActivity : AppCompatActivity() {
         }
 
 
-        vv_sample.setOnTouchListener { view, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> vv_sample.run {
-                    setAudioFocusRequest(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
-                    return@run true
-                }
-                MotionEvent.ACTION_UP -> vv_sample.run {
-                    abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
-                    return@run true
-                }
-                else -> return@setOnTouchListener true
-            }
-        }
+//        vv_sample.setOnTouchListener { view, motionEvent ->
+//            when (motionEvent.action) {
+//                MotionEvent.ACTION_DOWN -> vv_sample.run {
+//                    setAudioFocusRequest(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+//                    return@run true
+//                }
+//                MotionEvent.ACTION_UP -> vv_sample.run {
+//                    abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
+//                    return@run true
+//                }
+//                else -> return@setOnTouchListener true
+//            }
+//        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        vv_sample.releasePlayer()
     }
 
 }

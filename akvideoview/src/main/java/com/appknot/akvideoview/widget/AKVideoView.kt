@@ -3,10 +3,15 @@ package com.appknot.akvideoview.widget
 import android.R
 import android.app.Activity
 import android.app.Dialog
+import android.app.Notification
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.media.AudioManager
 import android.net.Uri
 import android.util.AttributeSet
@@ -16,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageButton
+import androidx.core.content.ContextCompat
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.BehindLiveWindowException
@@ -26,6 +32,7 @@ import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -49,6 +56,9 @@ open class AKVideoView : PlayerView {
 
     private var player: SimpleExoPlayer? = null
     private var mediaSource: MediaSource? = null
+    private var playerNotificationManager: PlayerNotificationManager? = null
+    private val PLAYBACK_CHANNEL_ID = "playback_channel"
+    private val PLAYBACK_NOTIFICATION_ID = 1
     private var onCompletionListener: (() -> Unit)? = null
     private var onPreparedListener: ((SimpleExoPlayer) -> Unit)? = null
     private var onBufferingListener: ((SimpleExoPlayer) -> Unit)? = null
@@ -140,6 +150,68 @@ open class AKVideoView : PlayerView {
             controllerShowTimeoutMs = value
         }
     var currentResizeMode = resizeMode
+
+    var isPlayback: Boolean = false
+        set(value) {
+            if (value) {
+                playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
+                    context,
+                    PLAYBACK_CHANNEL_ID,
+                    R.string.unknownName,
+                    0,
+                    PLAYBACK_NOTIFICATION_ID,
+                    object : PlayerNotificationManager.MediaDescriptionAdapter {
+                        override fun getCurrentContentTitle(player: Player?): String? =
+                            title ?: "-"
+
+                        override fun createCurrentContentIntent(player: Player?): PendingIntent? =
+                            null
+
+                        override fun getCurrentContentText(player: Player?): String? =
+                            subText
+
+                        override fun getCurrentLargeIcon(
+                            player: Player?,
+                            callback: PlayerNotificationManager.BitmapCallback?
+                        ): Bitmap? = when (iconResId) {
+                            null -> null
+                            else -> (ContextCompat.getDrawable(
+                                context,
+                                iconResId!!
+                            ) as BitmapDrawable).bitmap
+                        }
+                    },
+                    object : PlayerNotificationManager.NotificationListener {
+                        override fun onNotificationStarted(
+                            notificationId: Int,
+                            notification: Notification?
+                        ) {
+
+                        }
+
+                        override fun onNotificationCancelled(
+                            notificationId: Int,
+                            dismissedByUser: Boolean
+                        ) {
+
+                        }
+
+                        override fun onNotificationPosted(
+                            notificationId: Int,
+                            notification: Notification?,
+                            ongoing: Boolean
+                        ) {
+
+                        }
+                    }
+                )
+            }
+        }
+
+    var title: String? = null
+    var subText: String? = null
+    var iconResId: Int? = null
+    var currentContentIntent: Intent? = null
 
     /**
      * 풀스크린 버튼 사용시 반드시 값을 넣어주세요
@@ -306,6 +378,8 @@ open class AKVideoView : PlayerView {
         if (player == null) {
             player = ExoPlayerFactory.newSimpleInstance(context)
 
+            playerNotificationManager?.setPlayer(player)
+
             player?.let {
                 it.addListener(PlayerEventListener())
                 it.audioAttributes = audioAttributes
@@ -330,9 +404,10 @@ open class AKVideoView : PlayerView {
             C.TYPE_DASH -> DashMediaSource.Factory(buildDataSourceFactory()).createMediaSource(uri)
             C.TYPE_SS -> SsMediaSource.Factory(buildDataSourceFactory()).createMediaSource(uri)
             C.TYPE_HLS -> HlsMediaSource.Factory(buildDataSourceFactory()).createMediaSource(uri)
-            C.TYPE_OTHER -> ProgressiveMediaSource.Factory(buildDataSourceFactory()).createMediaSource(
-                uri
-            )
+            C.TYPE_OTHER -> ProgressiveMediaSource.Factory(buildDataSourceFactory())
+                .createMediaSource(
+                    uri
+                )
             else -> throw IllegalStateException("Unsupported type: $type")
         }
 
@@ -345,6 +420,8 @@ open class AKVideoView : PlayerView {
      *  동영상 플레이어 종료
      */
     fun releasePlayer() {
+        playerNotificationManager?.setPlayer(null)
+
         player?.let {
             it.release()
             mediaSource = null
