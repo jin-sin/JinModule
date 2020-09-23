@@ -63,15 +63,15 @@ dependencies {
     api 'com.jakewharton.rxbinding3:rxbinding-core:3.0.0-alpha2'
     api 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0-alpha2'
     // Koin
-    api 'org.koin:koin-core:2.0.1'
+    api 'org.koin:koin-core:2.1.6'
     // Koin extended & experimental features
-    api "org.koin:koin-core-ext:2.0.1"
+    api "org.koin:koin-core-ext:2.1.6"
     // Koin AndroidX Scope features
-    api "org.koin:koin-androidx-scope:2.0.1"
+    api "org.koin:koin-androidx-scope:2.1.6"
     // Koin AndroidX ViewModel features
-    api "org.koin:koin-androidx-viewmodel:2.0.1"
+    api "org.koin:koin-androidx-viewmodel:2.1.6"
     // Koin AndroidX Experimental features
-    api "org.koin:koin-androidx-ext:2.0.1"
+    api "org.koin:koin-androidx-ext:2.1.6"
 }
 
 
