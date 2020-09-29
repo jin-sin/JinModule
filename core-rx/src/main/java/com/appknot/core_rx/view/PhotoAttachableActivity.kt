@@ -19,7 +19,10 @@ import android.provider.MediaStore
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.databinding.ViewDataBinding
 import com.appknot.core_rx.R
+import com.appknot.core_rx.base.RxBaseActivity
+import com.appknot.core_rx.base.RxBaseViewModel
 import com.appknot.core_rx.util.*
 import com.appknot.core_rx.view.PhotoAttachableActivity.ACTIVITY_REQUEST_CODE.Companion.PICK_CHOOSER_REQUEST_CODE
 import io.reactivex.subjects.BehaviorSubject
@@ -32,7 +35,7 @@ import java.io.IOException
  *
  * @author Jin on 2019-11-25
  */
-abstract class PhotoAttachableActivity : AppCompatActivity() {
+abstract class PhotoAttachableActivity<VB: ViewDataBinding, VM: RxBaseViewModel> : RxBaseActivity<VB, VM>() {
     interface ACTIVITY_REQUEST_CODE {
         companion object {
             const val PICK_GALLERY = 1
@@ -114,7 +117,7 @@ abstract class PhotoAttachableActivity : AppCompatActivity() {
 
     fun onUIRefresh() {}
 
-    val photo: PublishSubject<Bitmap> = PublishSubject.create()
+    val photo = SingleLiveEvent<Bitmap>()
 
 
     var cropRatio: Int = 0
@@ -222,7 +225,7 @@ abstract class PhotoAttachableActivity : AppCompatActivity() {
 
     fun doFinalProcess() {
         val bm = BitmapFactory.decodeFile(getTempImageFile(this).absolutePath)
-        photo.onNext(bm)
+        photo.value = bm
     }
 
     fun crop() {}
