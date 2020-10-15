@@ -6,34 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".PdfViewActivity">
 
-
-    <com.appknot.module.widget.AKZoomView
+    <com.appknot.akpdfviewer.AKPdfViewer
+        android:id="@+id/pdf_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent" />
 
-        <com.appknot.akpdfviewer.AKPdfViewer
-            android:id="@+id/pdf_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </com.appknot.module.widget.AKZoomView>
 
     <Button
         android:id="@+id/btn_draw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="그리기"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="저장"
         android:enabled="false"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/btn_draw"/>
+        android:text="저장"
+        app:layout_constraintLeft_toRightOf="@id/btn_draw"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

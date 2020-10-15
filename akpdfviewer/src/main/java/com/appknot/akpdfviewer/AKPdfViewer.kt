@@ -79,7 +79,7 @@ class AKPdfViewer : PDFView, OnPageChangeListener {
             .pageFling(true)
             .enableAntialiasing(true)
             .onPageChange(this)
-            .pageFitPolicy(FitPolicy.HEIGHT)
+//            .pageFitPolicy(FitPolicy.HEIGHT)
             .onDraw(drawListener)
             .load()
 

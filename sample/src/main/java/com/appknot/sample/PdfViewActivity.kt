@@ -13,7 +13,7 @@ import java.util.ArrayList
 
 class PdfViewActivity : AppCompatActivity() {
 
-    val pdf = File(Environment.getExternalStorageDirectory().absolutePath + "/Download/jeju.pdf")
+    val pdf = File(Environment.getExternalStorageDirectory().absolutePath + "/Download/Gal2.pdf")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +22,7 @@ class PdfViewActivity : AppCompatActivity() {
         TedPermission.with(this)
             .setPermissionListener(object : PermissionListener  {
                 override fun onPermissionGranted() {
+                    pdf_view.useBestQuality(true)
                     pdf_view.initPdf(pdf)
                 }
 
