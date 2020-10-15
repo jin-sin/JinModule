@@ -2,7 +2,7 @@
 
 # What is AndroidModule?
 
-Public Appknot Android Module
+Public Android Module
 <br/><br/>
 
 
