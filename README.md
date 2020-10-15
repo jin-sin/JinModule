@@ -2,7 +2,7 @@
 
 # What is AndroidModule?
 
-Public Appknot Android Module
+Public Android Module
 <br/><br/>
 
 
@@ -30,21 +30,27 @@ allprojects {
 
 <b>Step3.</b> Add the dependency
 <br/><br/>
-Core
+Core-Rx
 * Retrofit
 * Glide
 * TedPermission
 * PhotoAttachActivity
-* Extensions - IntentExtension DialogExtensions SnackbarExtensions ToastExtexsions
+* Extensions - IntentExtension DialogExtensions SnackbarExtensions ToastExtexsions ViewExtensions
 * AKCountDownTimer
 * AKZoomView
 * Utils
 * ApiResponse
 * RetrofittUtil
+* Koin - DI Module
+* RxJava
+* RxBinding
+* LifeCycle Component
+* ViewModel Component
+
 
 ```gradle
 dependencies {
-	        implementation 'com.github.appknot.AndroidModule.core:$version'
+	        implementation 'com.github.appknot.AndroidModule:core-rx:$version'
 	}
 ```
 AkVideoView
