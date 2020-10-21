@@ -81,7 +81,7 @@ abstract class RxBaseFragment<T: ViewDataBinding, R: RxBaseViewModel> : Fragment
         viewModel.observeToastMessage(this) {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
-        viewModel.observeSnackbarMessageStr(this)   {
+        viewModel.observeToastMessageStr(this)   {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
     }
