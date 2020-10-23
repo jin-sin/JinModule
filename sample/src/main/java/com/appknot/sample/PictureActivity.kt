@@ -1,24 +1,21 @@
 package com.appknot.sample
 
-import android.content.Intent
 import android.graphics.Bitmap
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.appknot.module.extensions.startActivity
+import android.os.Bundle
 import com.appknot.module.view.PhotoAttachableActivity
+import kotlinx.android.synthetic.main.activity_picture.*
 
-class MainActivity : PhotoAttachableActivity() {
+class PictureActivity : PhotoAttachableActivity() {
 
     override var takePickerListener: (Bitmap) -> Unit = {
-        it
+        iv_picture.setImageBitmap(it)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_picture)
 
-        startActivity<PictureActivity>()
+        goGallery()
     }
-
-
 }

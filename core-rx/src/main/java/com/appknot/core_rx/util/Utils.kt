@@ -288,7 +288,7 @@ fun saveBitmapToFile(bitmap: Bitmap, context: Context) {
 fun getTempImageFile(context: Context): File {
     var context = context
     val path =
-        File(Environment.getExternalStorageDirectory().toString() + "/Android/data/" + context.packageName + "/temp/")
+        File(context.getExternalFilesDir(null)?.absolutePath + "/Android/data/" + context.packageName + "/temp/")
     if (!path.exists()) {
         path.mkdirs()
     }
