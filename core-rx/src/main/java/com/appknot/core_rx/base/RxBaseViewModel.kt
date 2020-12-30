@@ -70,6 +70,10 @@ open class RxBaseViewModel : ViewModel() {
         timer.stopTimer()
     }
 
+    fun removeTimerObserver() {
+        timer.removeTimerObserver()
+    }
+
     /**
      * RxBaseActivity 에서 쓰는 함수
      */
@@ -87,5 +91,8 @@ open class RxBaseViewModel : ViewModel() {
     }
     fun observeTimer(lifeCycleOwner: LifecycleOwner, finishOb: (Long) -> Unit, tickOb: (Long) -> Unit)    {
         timer.observe(lifeCycleOwner, finishOb, tickOb)
+    }
+    fun observeTimerForever(finishOb: (Long) -> Unit, tickOb: (Long) -> Unit) {
+        timer.observeForever(finishOb, tickOb)
     }
 }
