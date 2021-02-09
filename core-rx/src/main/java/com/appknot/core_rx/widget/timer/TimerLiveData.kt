@@ -18,7 +18,8 @@ class TimerLiveData : SingleLiveEvent<Long>() {
     var millisInFuture = 1000L
     var countDownInterval = 1000L
     var counter: Runnable? = null
-    lateinit var handler: Handler
+    var handler: Handler? = null
+    var timerObserver: Observer<Long>? = null
 
     override fun onInactive() {
         stopTimer()
@@ -26,7 +27,12 @@ class TimerLiveData : SingleLiveEvent<Long>() {
 
     fun stopTimer() {
         counter?.let { handler?.removeCallbacks(it) }
+    }
 
+    fun removeTimerObserver() {
+        timerObserver?.let {
+            super.removeObserver(it)
+        }
     }
 
     fun observe(
@@ -34,24 +40,49 @@ class TimerLiveData : SingleLiveEvent<Long>() {
         finishObserver: (Long) -> Unit,
         tickObserver: (Long) -> Unit
     ) {
-        handler = Handler()
         super.observe(owner, Observer {
-            counter = Runnable {
-                it?.run {
-                    if (millisInFuture <= 0) {
-                        //Done
-                        finishObserver(millisInFuture)
-                        stopTimer()
-                    } else {
-                        tickObserver(millisInFuture)
-                        millisInFuture -= countDownInterval
-                        handler.postDelayed(counter, countDownInterval)
-                    }
-                }
+            it?.let {
+                runCounter(finishObserver, tickObserver)
             }
-
-            handler.post(counter)
-
         })
+    }
+
+    /**
+     * 이 observe 는 죽지않습니다.
+     * 사용이 끝나면
+     * {@link #removeTimerObserver(Observer)} 를 호출하여 Observer 를 지워주세요
+     */
+    fun observeForever(
+        finishObserver: (Long) -> Unit,
+        tickObserver: (Long) -> Unit
+    ) {
+        timerObserver = Observer {
+            it?.let {
+                runCounter(finishObserver, tickObserver)
+            }
+        }
+        super.observeForever(timerObserver!!)
+    }
+
+    private fun runCounter(
+        finishObserver: (Long) -> Unit,
+        tickObserver: (Long) -> Unit
+    ) {
+        if (handler == null)
+            handler = Handler()
+
+        counter = Runnable {
+            if (millisInFuture <= 0) {
+                //Done
+                finishObserver(millisInFuture)
+                stopTimer()
+            } else {
+                tickObserver(millisInFuture)
+                millisInFuture -= countDownInterval
+                handler?.postDelayed(counter, countDownInterval)
+            }
+        }
+
+        handler?.post(counter)
     }
 }
