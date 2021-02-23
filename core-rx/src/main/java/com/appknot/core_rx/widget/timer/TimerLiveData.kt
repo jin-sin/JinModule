@@ -32,6 +32,7 @@ class TimerLiveData : SingleLiveEvent<Long>() {
     fun removeTimerObserver() {
         timerObserver?.let {
             super.removeObserver(it)
+            timerObserver = null
         }
     }
 
