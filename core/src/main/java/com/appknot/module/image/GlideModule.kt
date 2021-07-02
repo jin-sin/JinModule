@@ -16,9 +16,9 @@ import com.bumptech.glide.request.target.ViewTarget
  * Glide API 를 제너레이트 하기 위해 필요한 클래스
  * @author Xellsky(Alex Ji)
  */
-@GlideModule
-class GlideModule : AppGlideModule() {
-    override fun applyOptions(context: Context, builder: GlideBuilder) {
-        builder.setDefaultRequestOptions(RequestOptions().format(DecodeFormat.PREFER_RGB_565))
-    }
-}
+//@GlideModule
+//class GlideModule : AppGlideModule() {
+//    override fun applyOptions(context: Context, builder: GlideBuilder) {
+//        builder.setDefaultRequestOptions(RequestOptions().format(DecodeFormat.PREFER_RGB_565))
+//    }
+//}

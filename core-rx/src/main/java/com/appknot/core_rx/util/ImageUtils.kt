@@ -84,7 +84,6 @@ fun ImageView.loadImageToBitmap(
 @GlideModule
 class GlideModule : AppGlideModule() {
     override fun applyOptions(context: Context, builder: GlideBuilder) {
-        ViewTarget.setTagId(R.string.app_name)
         builder.setDefaultRequestOptions(RequestOptions().format(DecodeFormat.PREFER_RGB_565))
     }
 }
