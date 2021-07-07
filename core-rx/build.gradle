@@ -55,9 +55,11 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.12.0'
     // ViewModel and Lifecycle
     api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    api 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1'
     // rxJava
-    api 'io.reactivex.rxjava2:rxjava:2.1.9'
-    api 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    api 'io.reactivex.rxjava2:rxjava:2.2.10'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     api 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     api 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
     api 'com.jakewharton.rxbinding3:rxbinding-core:3.1.0'
@@ -72,6 +74,10 @@ dependencies {
     api "org.koin:koin-androidx-viewmodel:2.2.2"
     // Koin AndroidX Experimental features
     api "org.koin:koin-androidx-ext:2.2.2"
+    // Coroutine
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+    // RecyclerView
+    api "androidx.recyclerview:recyclerview:1.2.0"
 }
 
 
