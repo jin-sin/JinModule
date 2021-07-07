@@ -1,7 +1,12 @@
 package com.appknot.core_rx.base
 
+import androidx.annotation.MainThread
+import androidx.databinding.Bindable
+import androidx.databinding.Observable
+import androidx.databinding.PropertyChangeRegistry
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import com.appknot.core_rx.binding.BindingObservable
 import com.appknot.core_rx.util.SnackbarMessage
 import com.appknot.core_rx.util.SnackbarMessageString
 import com.appknot.core_rx.util.ToastMessage
@@ -9,13 +14,22 @@ import com.appknot.core_rx.util.ToastMessageString
 import com.appknot.core_rx.widget.timer.TimerLiveData
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import androidx.databinding.library.baseAdapters.BR
+import androidx.lifecycle.viewModelScope
+import com.appknot.core_rx.binding.bindingProperty
+import com.appknot.core_rx.extensions.bindingId
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlin.reflect.KFunction
+import kotlin.reflect.KProperty
 
 /**
  *
  * @author Jin on 2020-02-21
  */
 
-open class RxBaseViewModel : ViewModel() {
+open class RxBaseViewModel : ViewModel(), BindingObservable {
 
     // 일회성 이벤트를 만들어 내는 라이브 이벤트
     // 뷰는 이러한 이벤트를 바인딩하고 있다가, 적절한 상황이 되면 액티비티를 호출하거나 스낵바를 만듬
@@ -26,6 +40,22 @@ open class RxBaseViewModel : ViewModel() {
     private val toastMessageString = ToastMessageString()
 
     private val timer = TimerLiveData()
+
+    @get: Bindable
+    var isLoading: Boolean by bindingProperty(false)
+
+    private val fetchingIndex: MutableStateFlow<Int> = MutableStateFlow(0)
+//    private val listFlow = fetchingIndex.flatMapLatest { page ->
+//        mainRepository.fetchPokemonList(
+//            page = page,
+//            onStart = { isLoading = true },
+//            onComplete = { isLoading = false },
+//            onError = { toastMessage = it }
+//        )
+//    }
+//
+//    @get:Bindable
+//    val list: List<Any> by bindingProperty(emptyList())
 
     /**
      * RxJava 의 observing을 위한 부분.
@@ -38,7 +68,10 @@ open class RxBaseViewModel : ViewModel() {
     }
 
     override fun onCleared() {
+        clearAllProperties()
+
         compositeDisposable.clear()
+
         super.onCleared()
     }
 
@@ -95,4 +128,68 @@ open class RxBaseViewModel : ViewModel() {
     fun observeTimerForever(finishOb: (Long) -> Unit, tickOb: (Long) -> Unit) {
         timer.observeForever(finishOb, tickOb)
     }
+
+    private val lock: Any = Any()
+
+    private var propertyCallbacks: PropertyChangeRegistry? = null
+
+    override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        synchronized(lock) lock@{
+            val propertyCallbacks = propertyCallbacks
+                ?: PropertyChangeRegistry().also { propertyCallbacks = it }
+            propertyCallbacks.add(callback)
+        }
+    }
+
+
+    override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        synchronized(lock) lock@{
+            val propertyCallbacks = propertyCallbacks ?: return@lock
+            propertyCallbacks.remove(callback)
+        }
+    }
+
+    override fun notifyPropertyChanged(property: KProperty<*>) {
+        synchronized(lock) lock@{
+            val propertyCallbacks = propertyCallbacks ?: return@lock
+            propertyCallbacks.notifyCallbacks(this, property.bindingId(), null)
+        }
+    }
+
+    override fun notifyPropertyChanged(function: KFunction<*>) {
+        synchronized(lock) lock@{
+            val propertyCallbacks = propertyCallbacks ?: return@lock
+            propertyCallbacks.notifyCallbacks(this, function.bindingId(), null)
+        }
+    }
+
+    override fun notifyPropertyChanged(bindingId: Int) {
+        synchronized(lock) lock@{
+            val propertyCallbacks = propertyCallbacks ?: return@lock
+            propertyCallbacks.notifyCallbacks(this, bindingId, null)
+        }
+    }
+
+    override fun notifyAllPropertiesChanged() {
+        synchronized(lock) lock@{
+            val propertyCallbacks = propertyCallbacks ?: return@lock
+            propertyCallbacks.notifyCallbacks(this, BR._all, null)
+        }
+    }
+
+    override fun clearAllProperties() {
+        synchronized(lock) lock@{
+            val propertyCallbacks = propertyCallbacks ?: return@lock
+            propertyCallbacks.clear()
+        }
+    }
+
+
+    @MainThread
+    fun fetchNextList() {
+        if (!isLoading) {
+            fetchingIndex.value++
+        }
+    }
+
 }

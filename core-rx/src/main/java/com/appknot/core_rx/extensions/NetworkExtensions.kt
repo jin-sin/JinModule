@@ -7,6 +7,8 @@ import com.google.gson.internal.LinkedTreeMap
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.Response
 import java.util.*
 
@@ -36,6 +38,23 @@ fun <T : Response<ApiResponse>> Single<T>.api(): Single<ApiResponse> =
                 else -> Single.error(Throwable("통신에 실패했습니다."))
             }
         }
+
+fun <T : Response<ApiResponse>> Flow<T>.api(): Flow<Any> =
+    this.flowOn(Dispatchers.IO).flatMapLatest { response ->
+        flow {
+            when (response.code()) {
+                200 -> {
+                    response.body()?.let {
+                        when (it.code) {
+                            CODE_SUCCESS -> emit(it)
+                            else -> emit(ApiResponseException(it))
+                        }
+                    }
+                }
+                else -> emit(Throwable("통신에 실패했습니다."))
+            }
+        }
+    }
 
 fun <T> Single<T>.networkThread(): Single<T> =
     subscribeOn(Schedulers.io())
@@ -67,7 +86,7 @@ fun <T> Any.parse(modelType: Class<Array<T>>): ArrayList<T> {
     return ArrayList(resultArr.asList())
 }
 
-fun Any.toMap(): LinkedTreeMap<Any, *> {
+fun Any.toLinkedTreeMap(): LinkedTreeMap<Any, *> {
     return try {
         this as LinkedTreeMap<Any, *>
     } catch (e: ClassCastException) {
