@@ -2,6 +2,10 @@
     package="com.appknot.core_rx" >
 
 
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="30" />
+
     <application>
         <provider
             android:name=".binding.BindingInitProvider"

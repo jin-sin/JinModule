@@ -16,11 +16,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.viewModelScope
+import com.appknot.core_rx.binding.asBindingProperty
 import com.appknot.core_rx.binding.bindingProperty
 import com.appknot.core_rx.extensions.bindingId
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlin.reflect.KFunction
 import kotlin.reflect.KProperty
 
@@ -44,18 +43,7 @@ open class RxBaseViewModel : ViewModel(), BindingObservable {
     @get: Bindable
     var isLoading: Boolean by bindingProperty(false)
 
-    private val fetchingIndex: MutableStateFlow<Int> = MutableStateFlow(0)
-//    private val listFlow = fetchingIndex.flatMapLatest { page ->
-//        mainRepository.fetchPokemonList(
-//            page = page,
-//            onStart = { isLoading = true },
-//            onComplete = { isLoading = false },
-//            onError = { toastMessage = it }
-//        )
-//    }
-//
-//    @get:Bindable
-//    val list: List<Any> by bindingProperty(emptyList())
+    val fetchingIndex: MutableStateFlow<Int> = MutableStateFlow(0)
 
     /**
      * RxJava 의 observing을 위한 부분.

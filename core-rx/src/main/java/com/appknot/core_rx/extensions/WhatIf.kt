@@ -252,13 +252,6 @@ public inline fun <T, R> T.whatIfMap(
  *
  * @return Returns the desired type of object.
  */
-@Deprecated(
-    message = "use whatIfMap instead.",
-    replaceWith = ReplaceWith(
-        "whatIfMap(given, default, whatIf)",
-        imports = ["com.skydoves.whatIf.whatIfMap"]
-    )
-)
 @JvmSynthetic
 public inline fun <T, R> T.whatIfLet(
     given: Boolean?,
@@ -283,13 +276,6 @@ public inline fun <T, R> T.whatIfLet(
  *
  * @return Returns the desired type of object.
  */
-@Deprecated(
-    message = "use whatIfMap instead.",
-    replaceWith = ReplaceWith(
-        "whatIfMap(given, default, whatIf, whatIfNot)",
-        imports = ["com.skydoves.whatIf.whatIfMap"]
-    )
-)
 @JvmSynthetic
 public inline fun <T, R> T.whatIfLet(
     given: Boolean?,

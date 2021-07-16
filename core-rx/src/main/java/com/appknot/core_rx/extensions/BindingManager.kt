@@ -45,7 +45,6 @@ object BindingManager {
     /**
      * property 에 의한 binding ID 를 리턴한다.
      *
-     * @param property A kotlin [androidx.databinding.Bindable] property for finding proper binding ID.
      */
     internal fun getBindingIdByProperty(property: KProperty<*>): Int {
         val bindingProperty = property.takeIf {
@@ -61,9 +60,8 @@ object BindingManager {
     }
 
     /**
-     * Returns proper binding ID by function.
+     * function 에 의한 binding ID 를 리턴한다
      *
-     * @param function A kotlin [androidx.databinding.Bindable] function for finding proper binding ID.
      */
     internal fun getBindingIdByFunction(function: KFunction<*>): Int {
         val bindingFunction = function.takeIf {

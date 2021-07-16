@@ -30,15 +30,15 @@ object RecyclerViewBinding {
     }
 
     @JvmStatic
-    @BindingAdapter("paginationPokemonList")
-    fun paginationPokemonList(view: RecyclerView, viewModel: RxBaseViewModel) {
+    @BindingAdapter("paginationList")
+    fun paginationList(view: RecyclerView, viewModel: RxBaseViewModel) {
         RecyclerViewPaginator(
             recyclerView = view,
             isLoading = { viewModel.isLoading },
             loadMore = { viewModel.fetchNextList() },
             onLast = { false }
         ).run {
-            threshold = 10
+            threshold = 8
         }
     }
 }
