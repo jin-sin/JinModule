@@ -1,6 +1,6 @@
-package com.appknot.sample.coroutine
+package com.appknot.core_rx.coroutine
 
-import com.appknot.core_rx.api.ApiResponse
+import com.appknot.core_rx.api.TransApiResponse
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
@@ -17,7 +17,7 @@ class CoroutinesResponseCallAdapterFactory private constructor() : CallAdapter.F
         Call::class.java -> {
             val callType = getParameterUpperBound(0, returnType as ParameterizedType)
             when (getRawType(callType)) {
-                ApiResponse::class.java -> {
+                TransApiResponse::class.java -> {
                     val resultType = getParameterUpperBound(0, callType as ParameterizedType)
                     CoroutinesResponseCallAdapter(resultType)
                 }

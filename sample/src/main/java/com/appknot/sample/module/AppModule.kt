@@ -1,7 +1,7 @@
 package com.appknot.sample.module
 
 import com.appknot.sample.api.SampleApi
-import com.appknot.sample.coroutine.CoroutinesResponseCallAdapterFactory
+import com.appknot.core_rx.coroutine.CoroutinesResponseCallAdapterFactory
 import com.appknot.sample.viewmodel.PagingViewModel
 import com.appknot.sample.viewmodel.TimerViewModel
 import com.google.gson.GsonBuilder

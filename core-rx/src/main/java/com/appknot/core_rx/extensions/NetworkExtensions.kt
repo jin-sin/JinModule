@@ -1,6 +1,8 @@
 package com.appknot.core_rx.extensions
 
 import com.appknot.core_rx.api.ApiResponse
+import com.appknot.core_rx.api.ApiResponseException
+import com.appknot.core_rx.api.TransApiResponse
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import io.reactivex.Single
@@ -23,7 +25,7 @@ val CODE_SUCCESS = "0"
  * Rx로 구현한 ApiResponse 기반의 응답처리 익스텐션
  * 1회성의 Observable (Single) 을 리턴하여 구독할수 있도록 한
  * */
-fun <T : Response<ApiResponse<T>>> Single<T>.api(): Single<ApiResponse<T>> =
+fun <T : Response<ApiResponse>> Single<T>.api(): Single<ApiResponse> =
     networkThread()
         .flatMap { response ->
             when (response.code()) {
@@ -31,7 +33,7 @@ fun <T : Response<ApiResponse<T>>> Single<T>.api(): Single<ApiResponse<T>> =
                     response.body()?.let {
                         when (it.code) {
                             CODE_SUCCESS -> Single.just(it)
-                            else -> Single.error(Throwable(""))
+                            else -> Single.error(ApiResponseException(it))
                         }
                     }
                 }
@@ -40,30 +42,30 @@ fun <T : Response<ApiResponse<T>>> Single<T>.api(): Single<ApiResponse<T>> =
         }
 
 @JvmSynthetic
-suspend inline fun <T> ApiResponse<T>.suspendOnSuccess(
-    crossinline onResult: suspend ApiResponse.Success<T>.() -> Unit
-): ApiResponse<T> {
-    if (this is ApiResponse.Success) {
+suspend inline fun <T> TransApiResponse<T>.suspendOnSuccess(
+    crossinline onResult: suspend TransApiResponse.Success<T>.() -> Unit
+): TransApiResponse<T> {
+    if (this is TransApiResponse.Success) {
         onResult(this)
     }
     return this
 }
 
 @JvmSynthetic
-inline fun <T> ApiResponse<T>.onError(
-    crossinline onResult: ApiResponse.Failure.Error<T>.() -> Unit
-): ApiResponse<T> {
-    if (this is ApiResponse.Failure.Error) {
+inline fun <T> TransApiResponse<T>.onError(
+    crossinline onResult: TransApiResponse.Failure.Error<T>.() -> Unit
+): TransApiResponse<T> {
+    if (this is TransApiResponse.Failure.Error) {
         onResult(this)
     }
     return this
 }
 
 @JvmSynthetic
-inline fun <T> ApiResponse<T>.onException(
-    crossinline onResult: ApiResponse.Failure.Exception<T>.() -> Unit
-): ApiResponse<T> {
-    if (this is ApiResponse.Failure.Exception) {
+inline fun <T> TransApiResponse<T>.onException(
+    crossinline onResult: TransApiResponse.Failure.Exception<T>.() -> Unit
+): TransApiResponse<T> {
+    if (this is TransApiResponse.Failure.Exception) {
         onResult(this)
     }
     return this

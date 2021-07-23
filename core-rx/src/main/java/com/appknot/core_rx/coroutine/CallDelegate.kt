@@ -1,4 +1,4 @@
-package com.appknot.sample.coroutine
+package com.appknot.core_rx.coroutine
 
 import okhttp3.Request
 import okio.Timeout
