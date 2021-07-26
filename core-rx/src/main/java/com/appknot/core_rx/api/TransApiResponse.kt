@@ -11,11 +11,6 @@ import retrofit2.Response
  */
 open class TransApiResponse<T> {
 
-    inner class Msg {
-        lateinit var ko: String
-        lateinit var en: String
-    }
-
     data class Success<T>(val response: Response<T>) : TransApiResponse<T>() {
         val statusCode: StatusCode = getStatusCodeFromResponse(response)
         val headers: Headers = response.headers()
@@ -27,7 +22,7 @@ open class TransApiResponse<T> {
 
     sealed class Failure<T> {
         data class Error<T>(val response: Response<T>) : TransApiResponse<T>() {
-            //            lateinit var code: String
+            val statusCode: StatusCode = getStatusCodeFromResponse(response)
             val headers: Headers = response.headers()
             val raw: okhttp3.Response = response.raw()
             val errorBody: ResponseBody? = response.errorBody()

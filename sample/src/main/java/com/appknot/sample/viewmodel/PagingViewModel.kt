@@ -28,10 +28,10 @@ class PagingViewModel(val api: SampleApi) : RxBaseViewModel() {
     suspend fun getPassengers(page: Int = 0) =
         flow {
             api.getPassengers(page).suspendOnSuccess {
-                val submitData = ArrayList(body.data)
+                val submitData = ArrayList(data.data)
                 submitData.addAll(0, tempList)
                 emit(submitData)
-                tempList.addAll(body.data)
+                tempList.addAll(data.data)
             }.onError {
                 showToast("onError")
             }.onException {
