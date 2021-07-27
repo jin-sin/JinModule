@@ -1,6 +1,7 @@
 package com.appknot.core_rx.api
 
 import android.os.Parcelable
+import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 import okhttp3.Headers
 import okhttp3.ResponseBody
@@ -13,6 +14,7 @@ import retrofit2.Response
  */
 
 @Parcelize
+@JsonClass(generateAdapter = true)
 abstract class ParsingApiResponse<T> : Parcelable {
     lateinit var code: String
     lateinit var msg: Msg
