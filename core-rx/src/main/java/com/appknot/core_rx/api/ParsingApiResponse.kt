@@ -6,6 +6,7 @@ import kotlinx.android.parcel.Parcelize
 import okhttp3.Headers
 import okhttp3.ResponseBody
 import retrofit2.Response
+import java.io.Serializable
 
 
 /**
@@ -13,14 +14,13 @@ import retrofit2.Response
  * @author Jin Sin
  */
 
-@Parcelize
 @JsonClass(generateAdapter = true)
-abstract class ParsingApiResponse<T> : Parcelable {
+open class ParsingApiResponse<T> : Serializable {
     lateinit var code: String
     lateinit var msg: Msg
-    abstract var data: T?
+    var data: T? = null
 
-    inner class Msg {
+    class Msg : Serializable {
         lateinit var ko: String
         lateinit var en: String
     }
