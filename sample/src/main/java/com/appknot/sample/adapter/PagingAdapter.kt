@@ -8,20 +8,21 @@ import com.appknot.core_rx.extensions.binding
 import com.appknot.sample.R
 import com.appknot.sample.databinding.ItemPassengerBinding
 import com.appknot.sample.model.PassengerInfo
+import com.appknot.sample.model.Pokemon
 
-class PagingAdapter : BindingListAdapter<PassengerInfo.Passenger, PagingAdapter.PagingViewHolder>(
-    object : DiffUtil.ItemCallback<PassengerInfo.Passenger>() {
+class PagingAdapter : BindingListAdapter<Pokemon, PagingAdapter.PagingViewHolder>(
+    object : DiffUtil.ItemCallback<Pokemon>() {
         override fun areContentsTheSame(
-            oldItem: PassengerInfo.Passenger,
-            newItem: PassengerInfo.Passenger
+            oldItem: Pokemon,
+            newItem: Pokemon
         ): Boolean =
             oldItem == newItem
 
         override fun areItemsTheSame(
-            oldItem: PassengerInfo.Passenger,
-            newItem: PassengerInfo.Passenger
+            oldItem: Pokemon,
+            newItem: Pokemon
         ): Boolean =
-            oldItem._id == newItem._id
+            oldItem.name == newItem.name
     }
 ) {
 
@@ -35,7 +36,7 @@ class PagingAdapter : BindingListAdapter<PassengerInfo.Passenger, PagingAdapter.
 
     override fun onBindViewHolder(holder: PagingViewHolder, position: Int) {
         holder.binding.apply {
-            passenger = getItem(position)
+            pokemon = getItem(position)
             executePendingBindings()
         }
     }

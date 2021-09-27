@@ -21,17 +21,14 @@ class PagingViewModel(val api: SampleApi) : RxBaseViewModel() {
     }
 
     @get:Bindable
-    val passengerList: ArrayList<PassengerInfo.Passenger> by listFlow.asBindingProperty(viewModelScope, ArrayList())
+    val passengerList: ArrayList<Pokemon> by listFlow.asBindingProperty(viewModelScope, ArrayList())
 
     val tempList = arrayListOf<PassengerInfo.Passenger>()
 
     suspend fun getPassengers(page: Int = 0) =
         flow {
-            api.getPassengers(page).suspendOnSuccess {
-                val submitData = ArrayList(data.data)
-                submitData.addAll(0, tempList)
-                emit(submitData)
-                tempList.addAll(data.data)
+            api.fetchPokemonList(10, page * 10).suspendOnSuccess {
+                emit(data.results)
             }.onError {
                 showToast("onError")
             }.onException {

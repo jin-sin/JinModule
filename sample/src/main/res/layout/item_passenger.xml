@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="passenger"
-            type="com.appknot.sample.model.PassengerInfo.Passenger" />
+            name="pokemon"
+            type="com.appknot.sample.model.Pokemon" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,8 +25,8 @@
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:text="@{passenger.name}"
+            android:layout_height="wrap_content"
+            android:text="@{pokemon.name}"
             tools:text="android"
             app:layout_constraintTop_toBottomOf="@id/iv_logo"
             app:layout_constraintStart_toStartOf="parent"

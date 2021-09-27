@@ -27,7 +27,7 @@ val appContext = module {
     single(named("appContext")) { androidContext() }
 }
 
-fun getUrl() = "https://api.instantwebtools.net/"
+fun getUrl() = "https://pokeapi.co/api/v2/"
 
 val apiModule = module {
     single {
