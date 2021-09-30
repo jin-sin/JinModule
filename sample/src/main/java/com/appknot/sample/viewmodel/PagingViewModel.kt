@@ -10,6 +10,7 @@ import com.appknot.core_rx.extensions.onException
 import com.appknot.core_rx.extensions.suspendOnSuccess
 import com.appknot.sample.api.SampleApi
 import com.appknot.sample.model.PassengerInfo
+import com.appknot.sample.model.Pokemon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,14 +22,13 @@ class PagingViewModel(val api: SampleApi) : RxBaseViewModel() {
     }
 
     @get:Bindable
-    val passengerList: ArrayList<Pokemon> by listFlow.asBindingProperty(viewModelScope, ArrayList())
-
-    val tempList = arrayListOf<PassengerInfo.Passenger>()
+    val passengerList: List<Pokemon> by listFlow.asBindingProperty(viewModelScope, ArrayList())
 
     suspend fun getPassengers(page: Int = 0) =
         flow {
             api.fetchPokemonList(10, page * 10).suspendOnSuccess {
-                emit(data.results)
+                tempList.addAll(data.results)
+                emit(tempList)
             }.onError {
                 showToast("onError")
             }.onException {
@@ -37,4 +37,8 @@ class PagingViewModel(val api: SampleApi) : RxBaseViewModel() {
                 }
             }
         }.onStart { isLoading = true }.onCompletion { isLoading = false }.flowOn(Dispatchers.IO)
+
+    companion object {
+        val tempList = arrayListOf<Pokemon>()
+    }
 }
