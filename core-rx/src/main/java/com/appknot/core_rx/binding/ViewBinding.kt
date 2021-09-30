@@ -22,6 +22,6 @@ object ViewBinding {
     fun bindImage(view: ImageView, url: String) {
         GlideApp.with(view)
             .load(url)
-            .load(view)
+            .into(view)
     }
 }
