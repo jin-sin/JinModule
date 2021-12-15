@@ -19,8 +19,8 @@ import android.util.Log
 
 class AKCanvas : AppCompatImageView {
 
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     val paint = Paint()
 

@@ -18,9 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:use_controller="true"
-            app:resize_mode="fit"
-            app:rewind_increment="2000"
-            app:fastforward_increment="2000"/>
+            app:resize_mode="fit"/>
 
     </FrameLayout>
 

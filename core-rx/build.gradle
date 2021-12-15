@@ -28,6 +28,10 @@ android {
         enabled = true
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
 }
 
 dependencies {
@@ -70,15 +74,15 @@ dependencies {
     api 'com.jakewharton.rxbinding3:rxbinding-core:3.1.0'
     api 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.1.0'
     // Koin
-    api 'org.koin:koin-core:2.2.2'
-    // Koin extended & experimental features
-    api "org.koin:koin-core-ext:2.2.2"
-    // Koin AndroidX Scope features
-    api "org.koin:koin-androidx-scope:2.2.2"
-    // Koin AndroidX ViewModel features
-    api "org.koin:koin-androidx-viewmodel:2.2.2"
-    // Koin AndroidX Experimental features
-    api "org.koin:koin-androidx-ext:2.2.2"
+    api "io.insert-koin:koin-core:$koin_version"
+    // Koin main features for Android (Scope,ViewModel ...)
+    api "io.insert-koin:koin-android:$koin_version"
+    // Koin Java Compatibility
+    api "io.insert-koin:koin-android-compat:$koin_version"
+    // Koin for Jetpack WorkManager
+    api "io.insert-koin:koin-androidx-workmanager:$koin_version"
+    // Koin for Jetpack Compose
+    api "io.insert-koin:koin-androidx-compose:$koin_version"
     // Coroutine
     api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
     // RecyclerView

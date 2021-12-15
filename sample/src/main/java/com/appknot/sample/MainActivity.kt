@@ -17,7 +17,7 @@ class MainActivity : PhotoAttachableActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        startActivity<PagingActivity>()
+        startActivity<VideoActivity>()
     }
 
 

@@ -46,9 +46,9 @@ import kotlinx.android.synthetic.main.exo_player_view.view.*
  */
 open class AKVideoView : PlayerView {
 
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
         defStyleAttr
@@ -154,25 +154,23 @@ open class AKVideoView : PlayerView {
     var isPlayback: Boolean = false
         set(value) {
             if (value) {
-                playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
+                playerNotificationManager = PlayerNotificationManager.Builder(
                     context,
-                    PLAYBACK_CHANNEL_ID,
-                    R.string.unknownName,
-                    0,
                     PLAYBACK_NOTIFICATION_ID,
+                    PLAYBACK_CHANNEL_ID,
                     object : PlayerNotificationManager.MediaDescriptionAdapter {
-                        override fun getCurrentContentTitle(player: Player?): String? =
+                        override fun getCurrentContentTitle(player: Player): String =
                             title ?: "-"
 
-                        override fun createCurrentContentIntent(player: Player?): PendingIntent? =
+                        override fun createCurrentContentIntent(player: Player): PendingIntent? =
                             null
 
-                        override fun getCurrentContentText(player: Player?): String? =
+                        override fun getCurrentContentText(player: Player): String? =
                             subText
 
                         override fun getCurrentLargeIcon(
-                            player: Player?,
-                            callback: PlayerNotificationManager.BitmapCallback?
+                            player: Player,
+                            callback: PlayerNotificationManager.BitmapCallback
                         ): Bitmap? = when (iconResId) {
                             null -> null
                             else -> (ContextCompat.getDrawable(
@@ -180,14 +178,9 @@ open class AKVideoView : PlayerView {
                                 iconResId!!
                             ) as BitmapDrawable).bitmap
                         }
-                    },
+                    }
+                ).setNotificationListener(
                     object : PlayerNotificationManager.NotificationListener {
-                        override fun onNotificationStarted(
-                            notificationId: Int,
-                            notification: Notification?
-                        ) {
-
-                        }
 
                         override fun onNotificationCancelled(
                             notificationId: Int,
@@ -198,13 +191,13 @@ open class AKVideoView : PlayerView {
 
                         override fun onNotificationPosted(
                             notificationId: Int,
-                            notification: Notification?,
+                            notification: Notification,
                             ongoing: Boolean
                         ) {
 
                         }
                     }
-                )
+                ).build()
             }
         }
 
@@ -376,25 +369,30 @@ open class AKVideoView : PlayerView {
         releasePlayer()
 
         if (player == null) {
-            player = ExoPlayerFactory.newSimpleInstance(context)
+            player = SimpleExoPlayer.Builder(context).build()
 
             playerNotificationManager?.setPlayer(player)
 
             player?.let {
                 it.addListener(PlayerEventListener())
-                it.audioAttributes = audioAttributes
+                it.setAudioAttributes(audioAttributes, true)
             }
             setPlayer(player)
 
+            val concatenatingMediaSource = ConcatenatingMediaSource()
             val mediaSources = arrayOfNulls<MediaSource>(videoUri.size)
             videoUri.forEachIndexed { index, uri ->
                 mediaSources[index] = buildMediaSource(uri)
+                concatenatingMediaSource.addMediaSource(buildMediaSource(uri))
             }
-            mediaSource =
-                if (mediaSources.size == 1) mediaSources[0] else ConcatenatingMediaSource(*mediaSources)
+
+            mediaSources?.let {
+                mediaSource =
+                    if (mediaSources.size == 1) mediaSources[0] else concatenatingMediaSource
+            }
         }
 
-        player?.prepare(mediaSource, false, false)
+        mediaSource?.let { player?.setMediaSource(it, false) }
     }
 
     private fun buildMediaSource(uri: Uri) = buildMediaSource(uri, null)
@@ -430,11 +428,8 @@ open class AKVideoView : PlayerView {
     }
 
 
-    private fun isBehindLiveWindow(e: ExoPlaybackException): Boolean {
-        if (e.type != ExoPlaybackException.TYPE_SOURCE) {
-            return false
-        }
-        var cause: Throwable? = e.sourceException
+    private fun isBehindLiveWindow(e: PlaybackException): Boolean {
+        var cause: Throwable? = e.cause
         while (cause != null) {
             if (cause is BehindLiveWindowException) {
                 return true
@@ -444,7 +439,7 @@ open class AKVideoView : PlayerView {
         return false
     }
 
-    private inner class PlayerEventListener : Player.EventListener {
+    private inner class PlayerEventListener : Player.Listener {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             player?.let {
                 when (playbackState) {
@@ -462,7 +457,7 @@ open class AKVideoView : PlayerView {
             }
         }
 
-        override fun onPlayerError(error: ExoPlaybackException) {
+        override fun onPlayerError(error: PlaybackException) {
             if (isBehindLiveWindow(error)) {
 
             }
@@ -554,7 +549,7 @@ open class AKVideoView : PlayerView {
         exo_overlay.setOnTouchListener(listener)
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         return super.onTouchEvent(event)
         exo_overlay.onTouchEvent(event)
     }

@@ -12,7 +12,7 @@ import androidx.lifecycle.LifecycleService
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -55,30 +55,32 @@ class AudioService : LifecycleService() {
     override fun onCreate() {
         super.onCreate()
 
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
+        exoPlayer = SimpleExoPlayer.Builder(applicationContext).build()
         val audioAttributes = AudioAttributes.Builder()
             .setUsage(C.USAGE_MEDIA)
             .setContentType(C.CONTENT_TYPE_SPEECH)
             .build()
         exoPlayer.setAudioAttributes(audioAttributes, true)
 
-        playerNotificationManager = PlayerNotificationManager(
-            applicationContext, PLAYBACK_CHANNEL_ID, PLAYBACK_NOTIFICATION_ID,
+        playerNotificationManager = PlayerNotificationManager.Builder(
+            applicationContext,
+            PLAYBACK_NOTIFICATION_ID,
+            PLAYBACK_CHANNEL_ID,
             object : PlayerNotificationManager.MediaDescriptionAdapter  {
-                override fun getCurrentContentTitle(player: Player?): String? =
-                    title
+                override fun getCurrentContentTitle(player: Player): String =
+                    title.toString()
 
-                override fun createCurrentContentIntent(player: Player?): PendingIntent? = null
+                override fun createCurrentContentIntent(player: Player): PendingIntent? = null
 
-                override fun getCurrentContentText(player: Player?): String? =
+                override fun getCurrentContentText(player: Player): String? =
                     subText
 
                 override fun getCurrentLargeIcon(
-                    player: Player?,
-                    callback: PlayerNotificationManager.BitmapCallback?
+                    player: Player,
+                    callback: PlayerNotificationManager.BitmapCallback
                 ): Bitmap? = null
             }
-        )
+        ).build()
     }
 
     @MainThread
@@ -97,14 +99,11 @@ class AudioService : LifecycleService() {
 
     @MainThread
     fun play(uri: Uri, startPosition: Long, playbackSpeed: Float? = null) {
-        val userAgent = Util.getUserAgent(applicationContext, BuildConfig.APPLICATION_ID)
-        val mediaSource = ExtractorMediaSource(
-            uri,
+        val userAgent = Util.getUserAgent(applicationContext, BuildConfig.LIBRARY_PACKAGE_NAME)
+        val mediaSource = ProgressiveMediaSource.Factory(
             DefaultDataSourceFactory(applicationContext, userAgent),
-            DefaultExtractorsFactory(),
-            null,
-            null
-        )
+            DefaultExtractorsFactory()
+        ).createMediaSource(MediaItem.fromUri(uri))
 
         val haveStartPosition = startPosition != C.POSITION_UNSET.toLong()
         if (haveStartPosition) {

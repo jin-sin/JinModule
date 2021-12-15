@@ -11,7 +11,7 @@ import com.appknot.module.util.getNewFilePath
 import com.appknot.module.widget.camera.AKCameraView
 import com.appknot.module.widget.camera.AKCameraView.Companion.FACING_FRONT
 import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
+import com.gun0912.tedpermission.normal.TedPermission
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
 import java.io.FileOutputStream
@@ -74,14 +74,14 @@ class CameraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        TedPermission.with(this)
+        TedPermission.create()
             .setPermissionListener(object : PermissionListener  {
                 override fun onPermissionGranted() {
                     camera.addCallback(callback)
                     camera.start()
                 }
 
-                override fun onPermissionDenied(deniedPermissions: ArrayList<String>?) {
+                override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
 
                 }
             })
