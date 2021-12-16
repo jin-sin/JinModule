@@ -15,7 +15,7 @@ class VideoActivity : AppCompatActivity() {
 
         vv_sample.run {
 
-            isEnableSeekBar = false
+//            isEnableSeekBar = true
             canFewForward = true
             parentView = fl_media_frame
             isPlayback = true
