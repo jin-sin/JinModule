@@ -235,7 +235,7 @@ open class AKVideoView : PlayerView {
         player?.let {
             it.seekTo(0)
             it.playWhenReady = true
-            player?.let { onPlayingListener?.invoke(it) }
+            onPlayingListener?.invoke(it)
         }
     }
 
@@ -393,6 +393,7 @@ open class AKVideoView : PlayerView {
         }
 
         mediaSource?.let { player?.setMediaSource(it, false) }
+        player?.prepare()
     }
 
     private fun buildMediaSource(uri: Uri) = buildMediaSource(uri, null)
