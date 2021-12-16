@@ -39,7 +39,6 @@ android {
 
 dependencies {
     implementation project(':core')
-    implementation project(':akpdfviewer')
     implementation project(':akvideoview')
     implementation project(':core-rx')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
