@@ -10,7 +10,7 @@ publishing {
             pom {
                 name = 'core-rx'
                 description = 'Android Team Library'
-                url = 'http://com.appknot.AndroidModule'
+                url = 'https://com.appknot.AndroidModule'
                 properties = [
                         myProp: "value",
                         "prop.with.dots": "anotherValue"
