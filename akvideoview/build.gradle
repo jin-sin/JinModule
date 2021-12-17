@@ -5,27 +5,35 @@ plugins {
     id 'maven-publish'
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            // Creates a Maven publication called "release".
-            release(MavenPublication) {
-                // Applies the component for the release build variant.
-                from components.release
-
-                // You can then customize attributes of the publication as shown below.
-                groupId = 'com.appknot.akvideoview'
-                artifactId = 'final'
-                version = '1.0'
-            }
-            // Creates a Maven publication called “debug”.
-            debug(MavenPublication) {
-                // Applies the component for the debug build variant.
-                from components.debug
-
-                groupId = 'com.appknot.akvideoview'
-                artifactId = 'final-debug'
-                version = '1.0'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                name = 'akvideoview'
+                description = 'Android Team Library'
+                url = 'http://com.appknot.AndroidModule'
+                properties = [
+                        myProp: "value",
+                        "prop.with.dots": "anotherValue"
+                ]
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'jin'
+                        name = 'Jin Sin'
+                        email = 'jin@appknot.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:https://github.com/appknot/AndroidModule.git'
+                    developerConnection = 'scm:git@github.com:appknot/AndroidModule.git'
+                    url = 'https://github.com/appknot/AndroidModule'
+                }
             }
         }
     }
