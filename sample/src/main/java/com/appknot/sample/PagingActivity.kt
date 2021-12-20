@@ -2,7 +2,6 @@ package com.appknot.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
 import com.appknot.core_rx.base.RxBaseActivity
 import com.appknot.sample.adapter.PagingAdapter
 import com.appknot.sample.databinding.ActivityPagingBinding

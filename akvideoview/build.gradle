@@ -5,40 +5,6 @@ plugins {
     id 'maven-publish'
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            pom {
-                name = 'akvideoview'
-                description = 'Android Team Library'
-                url = 'https://com.appknot.AndroidModule'
-                properties = [
-                        myProp: "value",
-                        "prop.with.dots": "anotherValue"
-                ]
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'jin'
-                        name = 'Jin Sin'
-                        email = 'jin@appknot.com'
-                    }
-                }
-                scm {
-                    connection = 'scm:https://github.com/appknot/AndroidModule.git'
-                    developerConnection = 'scm:git@github.com:appknot/AndroidModule.git'
-                    url = 'https://github.com/appknot/AndroidModule'
-                }
-            }
-        }
-    }
-}
-
 android {
     compileSdkVersion 29
 
