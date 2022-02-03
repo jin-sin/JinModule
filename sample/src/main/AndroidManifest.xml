@@ -21,7 +21,6 @@
         <activity android:name=".PagingActivity"></activity>
         <activity android:name=".PictureActivity" />
         <activity android:name=".TimerActivity" />
-        <activity android:name=".PdfViewActivity" />
         <activity android:name=".CameraActivity" />
         <activity
             android:name=".VideoActivity"

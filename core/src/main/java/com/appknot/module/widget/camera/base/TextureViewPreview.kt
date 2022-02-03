@@ -66,7 +66,7 @@ class TextureViewPreview(context: Context, parent: ViewGroup) : PreviewImpl() {
     // This method is called only from Camera2.
     @TargetApi(15)
     override fun setBufferSize(width: Int, height: Int) {
-        mTextureView.surfaceTexture.setDefaultBufferSize(width, height)
+        mTextureView.surfaceTexture?.setDefaultBufferSize(width, height)
     }
 
     override fun setDisplayOrientation(displayOrientation: Int) {

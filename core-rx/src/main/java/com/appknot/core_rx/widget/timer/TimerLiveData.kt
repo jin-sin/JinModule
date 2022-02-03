@@ -80,10 +80,10 @@ class TimerLiveData : SingleLiveEvent<Long>() {
             } else {
                 tickObserver(millisInFuture)
                 millisInFuture -= countDownInterval
-                handler?.postDelayed(counter, countDownInterval)
+                handler?.postDelayed(counter!!, countDownInterval)
             }
         }
 
-        handler?.post(counter)
+        handler?.post(counter!!)
     }
 }

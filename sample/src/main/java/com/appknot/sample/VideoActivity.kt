@@ -19,7 +19,7 @@ class VideoActivity : AppCompatActivity() {
             canFewForward = true
             parentView = fl_media_frame
             isPlayback = true
-            setVideoURI(arrayOf(Uri.parse("https://s3.ap-northeast-2.amazonaws.com/apne2-apprd-tr-static/564a2d537fb62ac70387a3e65cccabbd96dc5ba9.mp4")))
+            setVideoURI(arrayOf(Uri.parse("https://ju-bu.co.kr/stylerpick-web/data/attachment/thumbnail248/45ad9e0a028e6ac5dbd5f4b66d3bdc1de045d39f_1638356247.mp4")))
 //            abandonFocusRequest(AudioManager.AUDIOFOCUS_LOSS)
             title = "TRSquare"
             subText = "브랜드캠퍼스"
