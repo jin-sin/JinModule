@@ -4,12 +4,10 @@ import androidx.databinding.Bindable
 import androidx.lifecycle.viewModelScope
 import com.appknot.core_rx.base.RxBaseViewModel
 import com.appknot.core_rx.binding.asBindingProperty
-import com.appknot.core_rx.binding.bindingProperty
 import com.appknot.core_rx.extensions.onError
 import com.appknot.core_rx.extensions.onException
 import com.appknot.core_rx.extensions.suspendOnSuccess
 import com.appknot.sample.api.SampleApi
-import com.appknot.sample.model.PassengerInfo
 import com.appknot.sample.model.Pokemon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

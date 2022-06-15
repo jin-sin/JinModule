@@ -7,7 +7,6 @@ import com.appknot.core_rx.adapter.BindingListAdapter
 import com.appknot.core_rx.extensions.binding
 import com.appknot.sample.R
 import com.appknot.sample.databinding.ItemPassengerBinding
-import com.appknot.sample.model.PassengerInfo
 import com.appknot.sample.model.Pokemon
 
 class PagingAdapter : BindingListAdapter<Pokemon, PagingAdapter.PagingViewHolder>(

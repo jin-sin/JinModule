@@ -1,13 +1,9 @@
 package com.appknot.sample
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import com.appknot.core_rx.base.RxBaseActivity
 import com.appknot.sample.adapter.PagingAdapter
 import com.appknot.sample.databinding.ActivityPagingBinding
 import com.appknot.sample.viewmodel.PagingViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PagingActivity : RxBaseActivity<ActivityPagingBinding, PagingViewModel>() {

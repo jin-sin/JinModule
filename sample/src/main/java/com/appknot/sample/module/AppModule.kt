@@ -4,7 +4,6 @@ import com.appknot.sample.api.SampleApi
 import com.appknot.core_rx.coroutine.CoroutinesResponseCallAdapterFactory
 import com.appknot.sample.viewmodel.PagingViewModel
 import com.appknot.sample.viewmodel.TimerViewModel
-import com.google.gson.GsonBuilder
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -14,8 +13,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 /**

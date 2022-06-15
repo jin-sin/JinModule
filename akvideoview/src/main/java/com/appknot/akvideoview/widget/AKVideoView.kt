@@ -400,12 +400,12 @@ open class AKVideoView : PlayerView {
 
     private fun buildMediaSource(uri: Uri, overrideExtension: String?): MediaSource =
         when (val type = Util.inferContentType(uri, overrideExtension)) {
-            C.TYPE_DASH -> DashMediaSource.Factory(buildDataSourceFactory()).createMediaSource(uri)
-            C.TYPE_SS -> SsMediaSource.Factory(buildDataSourceFactory()).createMediaSource(uri)
-            C.TYPE_HLS -> HlsMediaSource.Factory(buildDataSourceFactory()).createMediaSource(uri)
+            C.TYPE_DASH -> DashMediaSource.Factory(buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(uri))
+            C.TYPE_SS -> SsMediaSource.Factory(buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(uri))
+            C.TYPE_HLS -> HlsMediaSource.Factory(buildDataSourceFactory()).createMediaSource(MediaItem.fromUri(uri))
             C.TYPE_OTHER -> ProgressiveMediaSource.Factory(buildDataSourceFactory())
                 .createMediaSource(
-                    uri
+                    MediaItem.fromUri(uri)
                 )
             else -> throw IllegalStateException("Unsupported type: $type")
         }

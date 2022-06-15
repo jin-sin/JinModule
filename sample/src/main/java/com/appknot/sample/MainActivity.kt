@@ -1,9 +1,7 @@
 package com.appknot.sample
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.appknot.module.extensions.startActivity
 import com.appknot.module.view.PhotoAttachableActivity
 
@@ -16,8 +14,12 @@ class MainActivity : PhotoAttachableActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
 
-        startActivity<VideoActivity>()
+    override fun onResume() {
+        super.onResume()
+
+        startActivity<PagingActivity>()
     }
 
 

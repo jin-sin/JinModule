@@ -1,7 +1,6 @@
 package com.appknot.sample
 
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.appknot.module.view.PhotoAttachableActivity
 import kotlinx.android.synthetic.main.activity_picture.*
