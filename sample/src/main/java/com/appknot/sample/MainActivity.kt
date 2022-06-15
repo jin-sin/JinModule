@@ -19,7 +19,7 @@ class MainActivity : PhotoAttachableActivity() {
     override fun onResume() {
         super.onResume()
 
-        startActivity<PagingActivity>()
+        startActivity<VideoActivity>()
     }
 
 

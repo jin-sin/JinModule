@@ -7,15 +7,13 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.MainThread
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.util.Util
 
 /**
@@ -44,7 +42,7 @@ class AudioService : LifecycleService() {
     }
 
 
-    private lateinit var exoPlayer: SimpleExoPlayer
+    private lateinit var exoPlayer: ExoPlayer
     private var playerNotificationManager: PlayerNotificationManager? = null
 
     var title: String? = null
@@ -55,7 +53,7 @@ class AudioService : LifecycleService() {
     override fun onCreate() {
         super.onCreate()
 
-        exoPlayer = SimpleExoPlayer.Builder(applicationContext).build()
+        exoPlayer = ExoPlayer.Builder(applicationContext).build()
         val audioAttributes = AudioAttributes.Builder()
             .setUsage(C.USAGE_MEDIA)
             .setContentType(C.CONTENT_TYPE_SPEECH)
@@ -101,7 +99,7 @@ class AudioService : LifecycleService() {
     fun play(uri: Uri, startPosition: Long, playbackSpeed: Float? = null) {
         val userAgent = Util.getUserAgent(applicationContext, BuildConfig.LIBRARY_PACKAGE_NAME)
         val mediaSource = ProgressiveMediaSource.Factory(
-            DefaultDataSourceFactory(applicationContext, userAgent),
+            DefaultDataSource.Factory(applicationContext),
             DefaultExtractorsFactory()
         ).createMediaSource(MediaItem.fromUri(uri))
 
@@ -112,7 +110,7 @@ class AudioService : LifecycleService() {
 
         playbackSpeed?.let { changePlaybackSpeed(playbackSpeed) }
 
-        exoPlayer.prepare(mediaSource, !haveStartPosition, false)
+        exoPlayer.setMediaSource(mediaSource, !haveStartPosition)
         exoPlayer.playWhenReady = true
     }
 

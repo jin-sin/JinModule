@@ -10,7 +10,6 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.media.AudioManager
 import android.net.Uri
@@ -18,6 +17,7 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageButton
@@ -31,10 +31,10 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.ui.StyledPlayerView
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.exo_playback_control_view.view.*
 import kotlinx.android.synthetic.main.exo_player_view.view.*
@@ -54,15 +54,15 @@ open class AKVideoView : PlayerView {
         defStyleAttr
     )
 
-    private var player: SimpleExoPlayer? = null
+    private var player: ExoPlayer? = null
     private var mediaSource: MediaSource? = null
     private var playerNotificationManager: PlayerNotificationManager? = null
     private val PLAYBACK_CHANNEL_ID = "playback_channel"
     private val PLAYBACK_NOTIFICATION_ID = 1
     private var onCompletionListener: (() -> Unit)? = null
-    private var onPreparedListener: ((SimpleExoPlayer) -> Unit)? = null
-    private var onBufferingListener: ((SimpleExoPlayer) -> Unit)? = null
-    private var onPlayingListener: ((SimpleExoPlayer) -> Unit)? = null
+    private var onPreparedListener: ((ExoPlayer) -> Unit)? = null
+    private var onBufferingListener: ((ExoPlayer) -> Unit)? = null
+    private var onPlayingListener: ((ExoPlayer) -> Unit)? = null
     private var onPauseListener: (() -> Unit)? = null
     private val rewDoubleTapListener = object : GestureDetector.SimpleOnGestureListener() {
         override fun onDoubleTap(e: MotionEvent?): Boolean {
@@ -321,7 +321,7 @@ open class AKVideoView : PlayerView {
         player?.volume = 0F
     }
 
-    fun setOnPreparedListener(l: ((SimpleExoPlayer) -> Unit)?) {
+    fun setOnPreparedListener(l: ((ExoPlayer) -> Unit)?) {
         onPreparedListener = {
             l?.invoke(it)
         }
@@ -333,13 +333,13 @@ open class AKVideoView : PlayerView {
         }
     }
 
-    fun setOnBufferingListener(l: (SimpleExoPlayer) -> Unit) {
+    fun setOnBufferingListener(l: (ExoPlayer) -> Unit) {
         onBufferingListener = {
             l.invoke(it)
         }
     }
 
-    fun setOnPlayingListener(l: (SimpleExoPlayer) -> Unit) {
+    fun setOnPlayingListener(l: (ExoPlayer) -> Unit) {
         onPlayingListener = {
             l.invoke(it)
         }
@@ -369,7 +369,7 @@ open class AKVideoView : PlayerView {
         releasePlayer()
 
         if (player == null) {
-            player = SimpleExoPlayer.Builder(context).build()
+            player = ExoPlayer.Builder(context).build()
 
             playerNotificationManager?.setPlayer(player)
 
@@ -411,8 +411,7 @@ open class AKVideoView : PlayerView {
         }
 
 
-    private fun buildDataSourceFactory() =
-        DefaultDataSourceFactory(context, Util.getUserAgent(context, "androidModule"))
+    private fun buildDataSourceFactory() = DefaultDataSource.Factory(context)
 
 
     /*
