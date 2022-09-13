@@ -63,22 +63,25 @@ class AudioService : LifecycleService() {
         playerNotificationManager = PlayerNotificationManager.Builder(
             applicationContext,
             PLAYBACK_NOTIFICATION_ID,
-            PLAYBACK_CHANNEL_ID,
-            object : PlayerNotificationManager.MediaDescriptionAdapter  {
-                override fun getCurrentContentTitle(player: Player): String =
-                    title.toString()
+            PLAYBACK_CHANNEL_ID
+        ).apply {
+            setMediaDescriptionAdapter(
+                object : PlayerNotificationManager.MediaDescriptionAdapter  {
+                    override fun getCurrentContentTitle(player: Player): String =
+                        title.toString()
 
-                override fun createCurrentContentIntent(player: Player): PendingIntent? = null
+                    override fun createCurrentContentIntent(player: Player): PendingIntent? = null
 
-                override fun getCurrentContentText(player: Player): String? =
-                    subText
+                    override fun getCurrentContentText(player: Player): String? =
+                        subText
 
-                override fun getCurrentLargeIcon(
-                    player: Player,
-                    callback: PlayerNotificationManager.BitmapCallback
-                ): Bitmap? = null
-            }
-        ).build()
+                    override fun getCurrentLargeIcon(
+                        player: Player,
+                        callback: PlayerNotificationManager.BitmapCallback
+                    ): Bitmap? = null
+                }
+            )
+        }.build()
     }
 
     @MainThread
